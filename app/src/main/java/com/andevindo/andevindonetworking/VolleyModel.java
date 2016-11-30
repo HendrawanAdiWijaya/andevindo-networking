@@ -22,7 +22,7 @@ public class VolleyModel<T extends NetworkModel> {
     private NetworkMethod mNetworkMethod;
     private boolean mIsList = false;
     private BaseAPIListener mBaseAPIListener;
-
+    private int[] mResponseCodes = new int[1];
 
 
     private VolleyModel(ParameterBuilder parameterBuilder) {
@@ -30,6 +30,7 @@ public class VolleyModel<T extends NetworkModel> {
         mParameter = parameterBuilder.mParameter;
         mHeaders = parameterBuilder.mHeaders;
         mNetworkMethod = parameterBuilder.mNetworkMethod;
+        mResponseCodes = parameterBuilder.mResponseCodes;
     }
 
     private VolleyModel(MultiPartEntityBuilder multiPartEntityBuilder) {
@@ -37,6 +38,11 @@ public class VolleyModel<T extends NetworkModel> {
         mHttpEntity = multiPartEntityBuilder.mHttpEntity;
         mHeaders = multiPartEntityBuilder.mHeaders;
         mNetworkMethod = multiPartEntityBuilder.mNetworkMethod;
+        mResponseCodes = multiPartEntityBuilder.mResponseCodes;
+    }
+
+    public int[] getResponseCodes() {
+        return mResponseCodes;
     }
 
     public NetworkMethod getNetworkMethod() {
@@ -86,6 +92,7 @@ public class VolleyModel<T extends NetworkModel> {
         private Map<String, String> mHeaders;
         private String mUrl;
         private NetworkMethod mNetworkMethod = NetworkMethod.GET;
+        private int[] mResponseCodes = new int[1];
 
         public ParameterBuilder(String url){
             mUrl = url;
@@ -113,6 +120,11 @@ public class VolleyModel<T extends NetworkModel> {
             return this;
         }
 
+        public ParameterBuilder setResponseCodes(int[] responseCodes){
+            mResponseCodes= responseCodes;
+            return this;
+        }
+
         public VolleyModel build(){
             return new VolleyModel(this);
         }
@@ -124,6 +136,7 @@ public class VolleyModel<T extends NetworkModel> {
         private Map<String, String> mHeaders;
         private String mUrl = Network.getAPIAddress();
         private NetworkMethod mNetworkMethod = NetworkMethod.POST;
+        private int[] mResponseCodes = new int[1];
 
         public MultiPartEntityBuilder(String url){
             mUrl = url;
@@ -143,6 +156,11 @@ public class VolleyModel<T extends NetworkModel> {
 
         public MultiPartEntityBuilder setHeaders(Map<String, String> headers){
             mHeaders = headers;
+            return this;
+        }
+
+        public MultiPartEntityBuilder setResponseCodes(int[] responseCodes){
+            mResponseCodes= responseCodes;
             return this;
         }
 

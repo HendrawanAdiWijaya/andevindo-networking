@@ -37,7 +37,7 @@ public class VolleyRequest {
     }
 
     public void sendRequest(final String tag, final VolleyModel volleyModel,
-                            final VolleyListener.VolleySuccessListener successListener,
+                            Response.Listener<JSONObject> listener,
                             final VolleyListener.VolleyErrorListener volleyErrorListener,
                             final VolleyListener.VolleyErrorGlobalListener globalListener,
                             NetworkConfiguration networkConfiguration){
@@ -51,24 +51,7 @@ public class VolleyRequest {
         else
             method = Request.Method.DELETE;
         mCustomRequest = new CustomRequest(mContext, method, volleyModel.getUrl(), volleyModel.getHeaders(),
-                volleyModel.getParameter(), volleyModel.getHttpEntity(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    if (checkCode(response, Network.getSuccessCode())) {
-
-                        successListener.onSuccess(response, tag);
-
-                    } else {
-                        successListener.onOtherResponse(response, tag);
-                    }
-                } catch (JSONException e) {
-                    Log.d("VolleyResponse", tag + ":" + "Parse Error");
-                    volleyErrorListener.onParseError();
-                    globalListener.onErrorGlobalListener(tag);
-                }
-            }
-        }, new Response.ErrorListener() {
+                volleyModel.getParameter(), volleyModel.getHttpEntity(), listener, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (VolleyErrorMessage.isConnectionProblem(error)) {

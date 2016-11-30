@@ -2,6 +2,9 @@ package com.andevindo.andevindonetworking;
 
 import android.content.Context;
 
+import com.android.volley.Response;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -20,10 +23,10 @@ public class Volley {
     }
 
     public Volley(Context context, String tag, VolleyModel volleyModel,
-                  VolleyListener.VolleySuccessListener successListener, VolleyListener.VolleyErrorListener errorListener,
+                  Response.Listener<JSONObject> listener, VolleyListener.VolleyErrorListener errorListener,
                   VolleyListener.VolleyErrorGlobalListener globalListener, NetworkConfiguration networkConfiguration) {
 
-        new VolleyRequest(context).sendRequest(tag, volleyModel, successListener, errorListener, globalListener, networkConfiguration);
+        new VolleyRequest(context).sendRequest(tag, volleyModel, listener, errorListener, globalListener, networkConfiguration);
 
     }
 
@@ -54,6 +57,12 @@ public class Volley {
 
             @Override
             public void onOtherResponse(JSONObject jsonObject, String tag) {
+
+            }
+        };
+        private Response.Listener<JSONObject> mJSONObjectListener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
 
             }
         };
@@ -94,8 +103,23 @@ public class Volley {
             return this;
         }
 
-        public API setSuccessListener(VolleyListener.VolleySuccessListener listener) {
-            mVolleySuccessListener = listener;
+        public API setSuccessListener(final VolleyListener.VolleyResponseListener listener) {
+            mJSONObjectListener = new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        int code = response.getInt("kode");
+                        for (int i = 0; i < mVolleyModel.getResponseCodes().length; i++) {
+                            if (code==mVolleyModel.getResponseCodes()[i])
+                                listener.doWork(response,code);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mVolleyErrorListener.onParseError();
+                    }
+                }
+            };
+
             return this;
         }
 
@@ -120,7 +144,7 @@ public class Volley {
         }
 
         public Volley go() {
-            return new Volley(mContext, mTag, mVolleyModel, mVolleySuccessListener, mVolleyErrorListener, mVolleyErrorGlobalListener, mNetworkConfiguration);
+            return new Volley(mContext, mTag, mVolleyModel, mJSONObjectListener, mVolleyErrorListener, mVolleyErrorGlobalListener, mNetworkConfiguration);
         }
 
     }

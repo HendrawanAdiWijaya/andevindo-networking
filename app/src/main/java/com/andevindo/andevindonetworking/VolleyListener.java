@@ -15,6 +15,10 @@ public class VolleyListener {
 
     }
 
+    public interface VolleyResponseListener{
+        void doWork(JSONObject jsonObject, int responseCode);
+    }
+
     public interface VolleyErrorListener {
 
         void onNetworkError(String tag);

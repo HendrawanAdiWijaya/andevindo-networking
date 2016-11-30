@@ -1,6 +1,7 @@
 package com.andevindo.andevindonetworking;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Response;
 
@@ -23,10 +24,10 @@ public class Volley {
     }
 
     public Volley(Context context, String tag, VolleyModel volleyModel,
-                  Response.Listener<JSONObject> listener, VolleyListener.VolleyErrorListener errorListener,
+                  Response.Listener<JSONObject> listener, VolleyListener.VolleySuccessListener successListener, VolleyListener.VolleyErrorListener errorListener,
                   VolleyListener.VolleyErrorGlobalListener globalListener, NetworkConfiguration networkConfiguration) {
 
-        new VolleyRequest(context).sendRequest(tag, volleyModel, listener, errorListener, globalListener, networkConfiguration);
+        new VolleyRequest(context).sendRequest(tag, volleyModel, listener, successListener, errorListener, globalListener, networkConfiguration);
 
     }
 
@@ -123,6 +124,11 @@ public class Volley {
             return this;
         }
 
+        public API setSuccessListener(VolleyListener.VolleySuccessListener listener) {
+            mVolleySuccessListener = listener;
+            return this;
+        }
+
         public API setErrorListener(VolleyListener.VolleyErrorListener listener) {
             mVolleyErrorListener = listener;
             return this;
@@ -144,7 +150,7 @@ public class Volley {
         }
 
         public Volley go() {
-            return new Volley(mContext, mTag, mVolleyModel, mJSONObjectListener, mVolleyErrorListener, mVolleyErrorGlobalListener, mNetworkConfiguration);
+            return new Volley(mContext, mTag, mVolleyModel, mJSONObjectListener, mVolleySuccessListener, mVolleyErrorListener, mVolleyErrorGlobalListener, mNetworkConfiguration);
         }
 
     }

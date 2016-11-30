@@ -120,7 +120,7 @@ public class VolleyModel<T extends NetworkModel> {
             return this;
         }
 
-        public ParameterBuilder setResponseCodes(int[] responseCodes){
+        public ParameterBuilder setResponseCodes(int... responseCodes){
             mResponseCodes= responseCodes;
             return this;
         }
@@ -159,7 +159,7 @@ public class VolleyModel<T extends NetworkModel> {
             return this;
         }
 
-        public MultiPartEntityBuilder setResponseCodes(int[] responseCodes){
+        public MultiPartEntityBuilder setResponseCodes(int... responseCodes){
             mResponseCodes= responseCodes;
             return this;
         }

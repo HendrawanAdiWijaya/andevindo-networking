@@ -70,17 +70,17 @@ public class Volley {
         private VolleyListener.VolleyErrorListener mVolleyErrorListener = new VolleyListener.VolleyErrorListener() {
             @Override
             public void onNetworkError(String tag) {
-
+                mVolleyErrorListener.onNetworkError(tag);
             }
 
             @Override
             public void onServerError(String tag) {
-
+                mVolleyErrorResponseListener.onServerError(tag);
             }
 
             @Override
             public void onParseError() {
-
+                mVolleyErrorResponseListener.onParseError();
             }
         };
         private VolleyListener.VolleyErrorResponseListener mVolleyErrorResponseListener = new VolleyListener.VolleyErrorResponseListener() {
@@ -162,7 +162,7 @@ public class Volley {
         }
 
         public API setErrorListener(VolleyListener.VolleyErrorResponseListener listener) {
-            mVolleyErrorListener = listener;
+            mVolleyErrorResponseListener = listener;
             return this;
         }
 

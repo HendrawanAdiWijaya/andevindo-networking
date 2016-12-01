@@ -83,6 +83,27 @@ public class Volley {
 
             }
         };
+        private VolleyListener.VolleyErrorResponseListener mVolleyErrorResponseListener = new VolleyListener.VolleyErrorResponseListener() {
+            @Override
+            public void onResponseNotFound() {
+
+            }
+
+            @Override
+            public void onNetworkError(String tag) {
+
+            }
+
+            @Override
+            public void onServerError(String tag) {
+
+            }
+
+            @Override
+            public void onParseError() {
+
+            }
+        };
         private VolleyListener.VolleyErrorGlobalListener mVolleyErrorGlobalListener = new VolleyListener.VolleyErrorGlobalListener() {
             @Override
             public void onErrorGlobalListener(String tag) {
@@ -110,10 +131,16 @@ public class Volley {
                 public void onResponse(JSONObject response) {
                     try {
                         int code = response.getInt("kode");
+                        boolean isCodeFounded = false;
                         for (int i = 0; i < mVolleyModel.getResponseCodes().length; i++) {
-                            if (code==mVolleyModel.getResponseCodes()[i])
-                                listener.doWork(response,code);
+                            if (code==mVolleyModel.getResponseCodes()[i]) {
+                                listener.doWork(response, code);
+                                isCodeFounded = true;
+                                break;
+                            }
                         }
+                        if (!isCodeFounded)
+                            mVolleyErrorResponseListener.onResponseNotFound();
                     } catch (JSONException e) {
                         e.printStackTrace();
                         mVolleyErrorListener.onParseError();
@@ -130,6 +157,11 @@ public class Volley {
         }
 
         public API setErrorListener(VolleyListener.VolleyErrorListener listener) {
+            mVolleyErrorListener = listener;
+            return this;
+        }
+
+        public API setErrorListener(VolleyListener.VolleyErrorResponseListener listener) {
             mVolleyErrorListener = listener;
             return this;
         }

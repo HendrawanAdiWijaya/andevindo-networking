@@ -41,13 +41,13 @@ public class VolleyRequest {
                             final VolleyListener.VolleySuccessListener successListener,
                             final VolleyListener.VolleyErrorListener volleyErrorListener,
                             final VolleyListener.VolleyErrorGlobalListener globalListener,
-                            NetworkConfiguration networkConfiguration){
+                            NetworkConfiguration networkConfiguration) {
         int method;
-        if (volleyModel.getNetworkMethod()==NetworkMethod.POST)
+        if (volleyModel.getNetworkMethod() == NetworkMethod.POST)
             method = Request.Method.POST;
-        else if (volleyModel.getNetworkMethod()==NetworkMethod.GET)
+        else if (volleyModel.getNetworkMethod() == NetworkMethod.GET)
             method = Request.Method.GET;
-        else if (volleyModel.getNetworkMethod()==NetworkMethod.PUT)
+        else if (volleyModel.getNetworkMethod() == NetworkMethod.PUT)
             method = Request.Method.PUT;
         else
             method = Request.Method.DELETE;
@@ -55,19 +55,23 @@ public class VolleyRequest {
                 volleyModel.getParameter(), volleyModel.getHttpEntity(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                listener.onResponse(response);
+                if (listener != null)
+                    listener.onResponse(response);
                 try {
                     if (checkCode(response, Network.getSuccessCode())) {
-
-                        successListener.onSuccess(response, tag);
+                        if (successListener != null)
+                            successListener.onSuccess(response, tag);
 
                     } else {
-                        successListener.onOtherResponse(response, tag);
+                        if (successListener != null)
+                            successListener.onOtherResponse(response, tag);
                     }
                 } catch (JSONException e) {
                     Log.d("VolleyResponse", tag + ":" + "Parse Error");
-                    volleyErrorListener.onParseError();
-                    globalListener.onErrorGlobalListener(tag);
+                    if (volleyErrorListener != null)
+                        volleyErrorListener.onParseError();
+                    if (globalListener != null)
+                        globalListener.onErrorGlobalListener(tag);
                 }
             }
         }, new Response.ErrorListener() {
@@ -75,12 +79,15 @@ public class VolleyRequest {
             public void onErrorResponse(VolleyError error) {
                 if (VolleyErrorMessage.isConnectionProblem(error)) {
                     Log.d("VolleyResponse", tag + ":" + "Network Error");
-                    volleyErrorListener.onNetworkError(tag);
+                    if (volleyErrorListener != null)
+                        volleyErrorListener.onNetworkError(tag);
                 } else {
                     Log.d("VolleyResponse", tag + ":" + "Server Error");
-                    volleyErrorListener.onServerError(tag);
+                    if (volleyErrorListener != null)
+                        volleyErrorListener.onServerError(tag);
                 }
-                globalListener.onErrorGlobalListener(tag);
+                if (globalListener != null)
+                    globalListener.onErrorGlobalListener(tag);
             }
         });
 

@@ -50,66 +50,11 @@ public class Volley {
 
     public static class API {
 
-        private VolleyListener.VolleySuccessListener mVolleySuccessListener = new VolleyListener.VolleySuccessListener() {
-            @Override
-            public void onSuccess(JSONObject jsonObject, String tag) {
-
-            }
-
-            @Override
-            public void onOtherResponse(JSONObject jsonObject, String tag) {
-
-            }
-        };
-        private Response.Listener<JSONObject> mJSONObjectListener = new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-            }
-        };
-        private VolleyListener.VolleyErrorListener mVolleyErrorListener = new VolleyListener.VolleyErrorListener() {
-            @Override
-            public void onNetworkError(String tag) {
-                mVolleyErrorListener.onNetworkError(tag);
-            }
-
-            @Override
-            public void onServerError(String tag) {
-                mVolleyErrorResponseListener.onServerError(tag);
-            }
-
-            @Override
-            public void onParseError() {
-                mVolleyErrorResponseListener.onParseError();
-            }
-        };
-        private VolleyListener.VolleyErrorResponseListener mVolleyErrorResponseListener = new VolleyListener.VolleyErrorResponseListener() {
-            @Override
-            public void onResponseNotFound() {
-
-            }
-
-            @Override
-            public void onNetworkError(String tag) {
-
-            }
-
-            @Override
-            public void onServerError(String tag) {
-
-            }
-
-            @Override
-            public void onParseError() {
-
-            }
-        };
-        private VolleyListener.VolleyErrorGlobalListener mVolleyErrorGlobalListener = new VolleyListener.VolleyErrorGlobalListener() {
-            @Override
-            public void onErrorGlobalListener(String tag) {
-
-            }
-        };
+        private VolleyListener.VolleySuccessListener mVolleySuccessListener;
+        private Response.Listener<JSONObject> mJSONObjectListener;
+        private VolleyListener.VolleyErrorListener mVolleyErrorListener;
+        private VolleyListener.VolleyErrorResponseListener mVolleyErrorResponseListener;
+        private VolleyListener.VolleyErrorGlobalListener mVolleyErrorGlobalListener;
         private VolleyModel mVolleyModel = new VolleyModel.ParameterBuilder("").build();
         private NetworkConfiguration mNetworkConfiguration = new NetworkConfiguration.Builder().build();
         private String mTag;

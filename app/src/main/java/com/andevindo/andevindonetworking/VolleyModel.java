@@ -23,10 +23,11 @@ public class VolleyModel<T extends NetworkModel> {
     private boolean mIsList = false;
     private BaseAPIListener mBaseAPIListener;
     private int[] mResponseCodes = new int[1];
-
+    private String mExtraUrl;
 
     private VolleyModel(ParameterBuilder parameterBuilder) {
         mUrl += parameterBuilder.mUrl;
+        mExtraUrl = parameterBuilder.mUrl;
         mParameter = parameterBuilder.mParameter;
         mHeaders = parameterBuilder.mHeaders;
         mNetworkMethod = parameterBuilder.mNetworkMethod;
@@ -35,10 +36,16 @@ public class VolleyModel<T extends NetworkModel> {
 
     private VolleyModel(MultiPartEntityBuilder multiPartEntityBuilder) {
         mUrl += multiPartEntityBuilder.mUrl;
+        mExtraUrl = multiPartEntityBuilder.mUrl;
         mHttpEntity = multiPartEntityBuilder.mHttpEntity;
         mHeaders = multiPartEntityBuilder.mHeaders;
         mNetworkMethod = multiPartEntityBuilder.mNetworkMethod;
         mResponseCodes = multiPartEntityBuilder.mResponseCodes;
+    }
+
+    public void setCustomBaseURL(String baseURL){
+        mUrl = baseURL;
+        mUrl += mExtraUrl;
     }
 
     public int[] getResponseCodes() {
@@ -134,7 +141,7 @@ public class VolleyModel<T extends NetworkModel> {
         private MultipartEntityBuilder mMultipartEntityBuilder;
         private HttpEntity mHttpEntity;
         private Map<String, String> mHeaders;
-        private String mUrl = Network.getAPIAddress();
+        private String mUrl;
         private NetworkMethod mNetworkMethod = NetworkMethod.POST;
         private int[] mResponseCodes = new int[1];
 

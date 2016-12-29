@@ -24,9 +24,13 @@ public class VolleyModel<T extends NetworkModel> {
     private BaseAPIListener mBaseAPIListener;
     private int[] mResponseCodes = new int[1];
     private String mExtraUrl;
+    private int mVersion;
+    private String mVersionPrefix;
 
     private VolleyModel(ParameterBuilder parameterBuilder) {
-        mUrl += parameterBuilder.mUrl;
+        mVersion = parameterBuilder.mVersion;
+        mVersionPrefix = parameterBuilder.mVersionPrefix;
+        mUrl += parameterBuilder.mUrl + mVersionPrefix + mVersion + "/";
         mExtraUrl = parameterBuilder.mUrl;
         mParameter = parameterBuilder.mParameter;
         mHeaders = parameterBuilder.mHeaders;
@@ -35,7 +39,9 @@ public class VolleyModel<T extends NetworkModel> {
     }
 
     private VolleyModel(MultiPartEntityBuilder multiPartEntityBuilder) {
-        mUrl += multiPartEntityBuilder.mUrl;
+        mVersion = multiPartEntityBuilder.mVersion;
+        mVersionPrefix = multiPartEntityBuilder.mVersionPrefix;
+        mUrl += multiPartEntityBuilder.mUrl + mVersionPrefix + mVersion + "/";
         mExtraUrl = multiPartEntityBuilder.mUrl;
         mHttpEntity = multiPartEntityBuilder.mHttpEntity;
         mHeaders = multiPartEntityBuilder.mHeaders;
@@ -100,6 +106,8 @@ public class VolleyModel<T extends NetworkModel> {
         private String mUrl;
         private NetworkMethod mNetworkMethod = NetworkMethod.GET;
         private int[] mResponseCodes = new int[1];
+        private int mVersion = 1;
+        private String mVersionPrefix = "v";
 
         public ParameterBuilder(String url){
             mUrl = url;
@@ -108,6 +116,20 @@ public class VolleyModel<T extends NetworkModel> {
         public ParameterBuilder(String url, NetworkMethod networkMethod) {
             mUrl = url;
             mNetworkMethod = networkMethod;
+        }
+
+        public ParameterBuilder(String url, NetworkMethod networkMethod, int version){
+            mUrl = url;
+            mNetworkMethod = networkMethod;
+            mVersion = version;
+        }
+
+        public void setVersion(int version) {
+            mVersion = version;
+        }
+
+        public void setVersionPrefix(String versionPrefix) {
+            mVersionPrefix = versionPrefix;
         }
 
         public ParameterBuilder setNetworkMethod(NetworkMethod networkMethod) {
@@ -144,10 +166,26 @@ public class VolleyModel<T extends NetworkModel> {
         private String mUrl;
         private NetworkMethod mNetworkMethod = NetworkMethod.POST;
         private int[] mResponseCodes = new int[1];
+        private int mVersion = 1;
+        private String mVersionPrefix = "v";
 
         public MultiPartEntityBuilder(String url){
             mUrl = url;
             mMultipartEntityBuilder = MultipartEntityBuilder.create();
+        }
+
+        public MultiPartEntityBuilder(String url, NetworkMethod networkMethod, int version){
+            mUrl = url;
+            mNetworkMethod = networkMethod;
+            mVersion = version;
+        }
+
+        public void setVersion(int version) {
+            mVersion = version;
+        }
+
+        public void setVersionPrefix(String versionPrefix) {
+            mVersionPrefix = versionPrefix;
         }
 
         public MultiPartEntityBuilder addFile(String key, File file){

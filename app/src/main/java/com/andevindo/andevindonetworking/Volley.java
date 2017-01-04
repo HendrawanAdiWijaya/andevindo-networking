@@ -88,7 +88,7 @@ public class Volley {
                             mVolleyErrorResponseListener.onResponseNotFound();
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mVolleyErrorListener.onParseError();
+                        mVolleyErrorListener.onParseError(mTag);
                     }
                 }
             };
@@ -108,6 +108,22 @@ public class Volley {
 
         public API setErrorListener(VolleyListener.VolleyErrorResponseListener listener) {
             mVolleyErrorResponseListener = listener;
+            mVolleyErrorListener = new VolleyListener.VolleyErrorListener() {
+                @Override
+                public void onNetworkError(String tag) {
+                    mVolleyErrorResponseListener.onNetworkError(tag);
+                }
+
+                @Override
+                public void onServerError(String tag) {
+                    mVolleyErrorResponseListener.onServerError(tag);
+                }
+
+                @Override
+                public void onParseError(String tag) {
+                    mVolleyErrorResponseListener.onParseError(tag);
+                }
+            };
             return this;
         }
 

@@ -69,7 +69,7 @@ public class VolleyRequest {
                 } catch (JSONException e) {
                     Log.d("VolleyResponse", tag + ":" + "Parse Error");
                     if (volleyErrorListener != null)
-                        volleyErrorListener.onParseError();
+                        volleyErrorListener.onParseError(tag);
                     if (globalListener != null)
                         globalListener.onErrorGlobalListener(tag);
                 }

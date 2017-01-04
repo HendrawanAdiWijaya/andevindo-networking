@@ -23,7 +23,7 @@ public class VolleyListener {
 
         void onNetworkError(String tag);
         void onServerError(String tag);
-        void onParseError();
+        void onParseError(String tag);
 
     }
 

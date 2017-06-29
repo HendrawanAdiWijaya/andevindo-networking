@@ -1,5 +1,7 @@
 package com.andevindo.andevindonetworking;
 
+import android.content.Context;
+
 /**
  * Created by heendher on 11/3/2016.
  */
@@ -14,21 +16,25 @@ public class Network {
     private static String sAPI_ADDRESS = NetworkConfig.API_ADDRESS;
     private static String sJSON_KEY_RESULT = NetworkConfig.JSON_KEY_RESULT;
 
-    private static Network ourInstance = new Network();
+    private static Network sINSTANCE;
 
     public static Network setNetworkConfiguration(NetworkConfiguration networkConfiguration){
         sSOCKET_TIME_OUT = networkConfiguration.getSocketTimeOut();
         sRETRIES = networkConfiguration.getRetries();
         sSUCCESS_CODE = networkConfiguration.getSuccessCode();
         sAPI_ADDRESS = networkConfiguration.getAPIAddress();
-        return ourInstance;
+        return sINSTANCE;
     }
 
-    public static Network getInstance() {
-        return ourInstance;
+    public static Network getInstance(Context context) {
+        if (sINSTANCE ==null){
+            sINSTANCE = new Network(context);
+        }
+        return sINSTANCE;
     }
 
-    private Network() {
+    private Network(Context context) {
+        VolleySingleton.initialize(context);
     }
 
     public static int getSocketTimeOut() {

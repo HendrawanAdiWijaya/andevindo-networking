@@ -28,7 +28,7 @@ public class VolleyListener {
     }
 
     public interface VolleyErrorResponseListener extends VolleyErrorListener{
-        void onResponseNotFound();
+        void onResponseNotFound(String tag);
     }
 
     public interface VolleyErrorGlobalListener{

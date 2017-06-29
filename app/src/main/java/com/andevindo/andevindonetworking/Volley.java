@@ -11,40 +11,20 @@ import org.json.JSONObject;
 /**
  * Created by heendher on 11/3/2016.
  */
-public class Volley {
+public class Volley{
 
-    private static Volley ourInstance = new Volley();
-
-
-    public static Builder with(Context context) {
-        return new Builder(context);
+    public API setAPI(VolleyModel volleyModel) {
+        return new API(volleyModel);
     }
 
     private Volley() {
     }
 
-    public Volley(Context context, String tag, VolleyModel volleyModel,
+    public Volley(String tag, VolleyModel volleyModel,
                   Response.Listener<JSONObject> listener, VolleyListener.VolleySuccessListener successListener, VolleyListener.VolleyErrorListener errorListener,
                   VolleyListener.VolleyErrorGlobalListener globalListener, NetworkConfiguration networkConfiguration) {
 
-        new VolleyRequest(context).sendRequest(tag, volleyModel, listener, successListener, errorListener, globalListener, networkConfiguration);
-
-    }
-
-    public static class Builder {
-
-
-        private Context mContext;
-
-
-        public Builder(Context context) {
-            mContext = context;
-        }
-
-        public API setAPI(VolleyModel volleyModel) {
-            return new API(volleyModel, mContext);
-        }
-
+        new VolleyRequest().sendRequest(tag, volleyModel, listener, successListener, errorListener, globalListener, networkConfiguration);
 
     }
 
@@ -58,11 +38,9 @@ public class Volley {
         private VolleyModel mVolleyModel = new VolleyModel.ParameterBuilder("").build();
         private NetworkConfiguration mNetworkConfiguration = new NetworkConfiguration.Builder().build();
         private String mTag;
-        private Context mContext;
 
-        public API(VolleyModel volleyModel, Context context) {
+        public API(VolleyModel volleyModel) {
             mVolleyModel = volleyModel;
-            mContext = context;
         }
 
         public API setMethod(NetworkMethod networkMethod) {
@@ -76,16 +54,7 @@ public class Volley {
                 public void onResponse(JSONObject response) {
                     try {
                         int code = response.getInt("kode");
-                        boolean isCodeFounded = false;
-                        for (int i = 0; i < mVolleyModel.getResponseCodes().length; i++) {
-                            if (code==mVolleyModel.getResponseCodes()[i]) {
-                                listener.doWork(response, code, mTag);
-                                isCodeFounded = true;
-                                break;
-                            }
-                        }
-                        if (!isCodeFounded)
-                            mVolleyErrorResponseListener.onResponseNotFound();
+                        listener.doWork(response, code, mTag);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         mVolleyErrorListener.onParseError(mTag);
@@ -143,7 +112,7 @@ public class Volley {
         }
 
         public Volley go() {
-            return new Volley(mContext, mTag, mVolleyModel, mJSONObjectListener, mVolleySuccessListener, mVolleyErrorListener, mVolleyErrorGlobalListener, mNetworkConfiguration);
+            return new Volley(mTag, mVolleyModel, mJSONObjectListener, mVolleySuccessListener, mVolleyErrorListener, mVolleyErrorGlobalListener, mNetworkConfiguration);
         }
 
     }

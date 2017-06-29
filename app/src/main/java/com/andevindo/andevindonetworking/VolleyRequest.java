@@ -18,11 +18,9 @@ import org.json.JSONObject;
 public class VolleyRequest {
     private RequestQueue mRequestQueue;
     private CustomRequest mCustomRequest;
-    private Context mContext;
 
-    public VolleyRequest(Context context) {
-        mContext = context;
-        mRequestQueue = VolleySingleton.getInstance(context).getRequestQueue();
+    public VolleyRequest() {
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
     }
 
 
@@ -51,7 +49,7 @@ public class VolleyRequest {
             method = Request.Method.PUT;
         else
             method = Request.Method.DELETE;
-        mCustomRequest = new CustomRequest(mContext, method, volleyModel.getUrl(), volleyModel.getHeaders(),
+        mCustomRequest = new CustomRequest(method, volleyModel.getUrl(), volleyModel.getHeaders(),
                 volleyModel.getParameter(), volleyModel.getHttpEntity(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {

@@ -19,12 +19,14 @@ class VolleySingleton {
         mRequestQueue = Volley.newRequestQueue(context);
     }
 
-
-
-    public static VolleySingleton getInstance(Context context) {
+    public static VolleySingleton initialize(Context context) {
         if(sInstance == null){
             sInstance = new VolleySingleton(context);
         }
+        return sInstance;
+    }
+
+    public static VolleySingleton getInstance() {
         return sInstance;
     }
 

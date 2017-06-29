@@ -30,13 +30,11 @@ class CustomRequest extends Request<JSONObject> {
     private Response.Listener<JSONObject> mListener;
     private Map<String, String> mParams;
     private Map<String, String> mHeaders;
-    private Context mContext;
     private HttpEntity mHttpEntity;
 
-    public CustomRequest(Context context, int method, String url, Map<String, String> headers, Map<String, String> params,
+    public CustomRequest(int method, String url, Map<String, String> headers, Map<String, String> params,
                          HttpEntity httpEntity, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
-        mContext = context;
         mListener = responseListener;
         mParams = params;
         mHttpEntity = httpEntity;

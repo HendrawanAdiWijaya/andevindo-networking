@@ -13,7 +13,7 @@ import org.json.JSONObject;
  */
 public class Volley{
 
-    public API setAPI(VolleyModel volleyModel) {
+    public static API setAPI(VolleyModel volleyModel) {
         return new API(volleyModel);
     }
 

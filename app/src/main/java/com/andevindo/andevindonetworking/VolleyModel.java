@@ -20,6 +20,7 @@ public class VolleyModel<T extends NetworkModel> {
     private Map<String, String> mHeaders;
     private HttpEntity mHttpEntity;
     private NetworkMethod mNetworkMethod;
+    private MultipartEntityBuilder mMultipartEntityBuilder;
     private boolean mIsList = false;
     private BaseAPIListener mBaseAPIListener;
     //private int[] mResponseCodes = new int[1];
@@ -38,9 +39,15 @@ public class VolleyModel<T extends NetworkModel> {
         mUrl += multiPartEntityBuilder.mUrl;
         mExtraUrl = multiPartEntityBuilder.mUrl;
         mHttpEntity = multiPartEntityBuilder.mHttpEntity;
+        mMultipartEntityBuilder = multiPartEntityBuilder.mMultipartEntityBuilder;
         mHeaders = multiPartEntityBuilder.mHeaders;
         mNetworkMethod = multiPartEntityBuilder.mNetworkMethod;
         //mResponseCodes = multiPartEntityBuilder.mResponseCodes;
+    }
+
+    public void addString(String key, String value){
+        mMultipartEntityBuilder.addTextBody(key, value);
+        mHttpEntity = mMultipartEntityBuilder.build();
     }
 
     public void setCustomBaseURL(String baseURL){

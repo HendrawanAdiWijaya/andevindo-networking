@@ -1,6 +1,7 @@
 package com.andevindo.andevindonetworking;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -31,14 +32,16 @@ class CustomRequest extends Request<JSONObject> {
     private Map<String, String> mParams;
     private Map<String, String> mHeaders;
     private HttpEntity mHttpEntity;
+    private boolean mIsDebugOn;
 
     public CustomRequest(int method, String url, Map<String, String> headers, Map<String, String> params,
-                         HttpEntity httpEntity, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener) {
+                         HttpEntity httpEntity, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener, boolean isDebugOn) {
         super(method, url, errorListener);
         mListener = responseListener;
         mParams = params;
         mHttpEntity = httpEntity;
         mHeaders = headers;
+        mIsDebugOn = isDebugOn;
     }
 
     @Override
@@ -61,13 +64,10 @@ class CustomRequest extends Request<JSONObject> {
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        if (mHeaders!=null)
+        if (mHeaders != null)
             return mHeaders;
         else
-        /*Map<String, String> map = new HashMap<>(1);
-        map.put("Accept", "application/json");
-        map.put("Authorization", "Bearer " + PreferencesManager.getApiToken(mContext));*/
-        return super.getHeaders();
+            return super.getHeaders();
     }
 
     @Override
@@ -91,6 +91,9 @@ class CustomRequest extends Request<JSONObject> {
         try {
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
+            if (mIsDebugOn){
+                Log.d("ServerResponse", jsonString);
+            }
             return Response.success(new JSONObject(jsonString),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {

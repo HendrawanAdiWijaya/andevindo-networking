@@ -22,9 +22,10 @@ public class Volley{
 
     public Volley(String tag, VolleyModel volleyModel,
                   Response.Listener<JSONObject> listener, VolleyListener.VolleySuccessListener successListener, VolleyListener.VolleyErrorListener errorListener,
-                  VolleyListener.VolleyErrorGlobalListener globalListener, NetworkConfiguration networkConfiguration) {
+                  VolleyListener.VolleyErrorGlobalListener globalListener, NetworkConfiguration networkConfiguration,
+                  boolean isDebugOn) {
 
-        new VolleyRequest().sendRequest(tag, volleyModel, listener, successListener, errorListener, globalListener, networkConfiguration);
+        new VolleyRequest().sendRequest(tag, volleyModel, listener, successListener, errorListener, globalListener, networkConfiguration, isDebugOn);
 
     }
 
@@ -38,6 +39,7 @@ public class Volley{
         private VolleyModel mVolleyModel = new VolleyModel.ParameterBuilder("").build();
         private NetworkConfiguration mNetworkConfiguration = new NetworkConfiguration.Builder().build();
         private String mTag;
+        private boolean mIsDebugOn;
 
         public API(VolleyModel volleyModel) {
             mVolleyModel = volleyModel;
@@ -111,8 +113,13 @@ public class Volley{
             return this;
         }
 
+        public API setDebugOn(boolean isDebugOn){
+            mIsDebugOn = isDebugOn;
+            return this;
+        }
+
         public Volley go() {
-            return new Volley(mTag, mVolleyModel, mJSONObjectListener, mVolleySuccessListener, mVolleyErrorListener, mVolleyErrorGlobalListener, mNetworkConfiguration);
+            return new Volley(mTag, mVolleyModel, mJSONObjectListener, mVolleySuccessListener, mVolleyErrorListener, mVolleyErrorGlobalListener, mNetworkConfiguration, mIsDebugOn);
         }
 
     }

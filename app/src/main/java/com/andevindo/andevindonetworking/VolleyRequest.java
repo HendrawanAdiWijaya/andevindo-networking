@@ -39,7 +39,8 @@ public class VolleyRequest {
                             final VolleyListener.VolleySuccessListener successListener,
                             final VolleyListener.VolleyErrorListener volleyErrorListener,
                             final VolleyListener.VolleyErrorGlobalListener globalListener,
-                            NetworkConfiguration networkConfiguration) {
+                            NetworkConfiguration networkConfiguration,
+                            boolean isDebugOn) {
         int method;
         if (volleyModel.getNetworkMethod() == NetworkMethod.POST)
             method = Request.Method.POST;
@@ -87,7 +88,7 @@ public class VolleyRequest {
                 if (globalListener != null)
                     globalListener.onErrorGlobalListener(tag);
             }
-        });
+        }, isDebugOn);
 
         mCustomRequest.setRetryPolicy(new DefaultRetryPolicy(networkConfiguration.getSocketTimeOut(),
                 networkConfiguration.getRetries(), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

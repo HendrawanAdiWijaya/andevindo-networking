@@ -54,8 +54,10 @@ public class VolleyRequest {
                 volleyModel.getParameter(), volleyModel.getHttpEntity(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                if (listener != null)
+                if (listener != null) {
                     listener.onResponse(response);
+                    return;
+                }
                 try {
                     if (checkCode(response, Network.getSuccessCode())) {
                         if (successListener != null)

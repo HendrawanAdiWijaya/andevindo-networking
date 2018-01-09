@@ -50,6 +50,16 @@ public class Volley{
             return this;
         }
 
+        public API setRawJSONListener(final VolleyListener.VolleyRawJSONListener listener){
+            mJSONObjectListener = new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    listener.doWork(response, mTag);
+                }
+            };
+            return this;
+        }
+
         public API setSuccessListener(final VolleyListener.VolleyResponseListener listener) {
             mJSONObjectListener = new Response.Listener<JSONObject>() {
                 @Override

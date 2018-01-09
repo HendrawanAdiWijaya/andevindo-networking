@@ -9,6 +9,10 @@ import org.json.JSONObject;
 
 public class VolleyListener {
 
+    public interface VolleyRawJSONListener{
+        void doWork(JSONObject jsonObject, String tag);
+    }
+
     public interface VolleySuccessListener {
         void onSuccess(JSONObject jsonObject, String tag);
         void onOtherResponse(JSONObject jsonObject, String tag);

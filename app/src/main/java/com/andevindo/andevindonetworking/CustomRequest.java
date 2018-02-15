@@ -88,11 +88,16 @@ class CustomRequest extends Request<JSONObject> {
     }
 
     @Override
-    protected VolleyError parseNetworkError(VolleyError volleyError) {
+    public void deliverError(VolleyError error) {
+        super.deliverError(error);
         if (mIsDebugOn){
-            Log.d("ServerResponse", volleyError.networkResponse.toString());
+            try {
+                Log.d("ServerResponse", new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                Log.d("ServerResponse", new String(error.networkResponse.data));
+            }
         }
-        return super.parseNetworkError(volleyError);
     }
 
     @Override

@@ -89,11 +89,11 @@ class CustomRequest extends Request<JSONObject> {
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
         try {
+            if (mIsDebugOn){
+                Log.d("ServerResponse", response.toString());
+            }
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
-            if (mIsDebugOn){
-                Log.d("ServerResponse", jsonString);
-            }
             return Response.success(new JSONObject(jsonString),
                     HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {

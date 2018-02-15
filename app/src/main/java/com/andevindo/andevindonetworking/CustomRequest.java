@@ -90,7 +90,7 @@ class CustomRequest extends Request<JSONObject> {
     @Override
     public void deliverError(VolleyError error) {
         super.deliverError(error);
-        if (mIsDebugOn){
+        if (mIsDebugOn&&error!=null){
             try {
                 Log.d("ServerResponse", new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers)));
             } catch (UnsupportedEncodingException e) {
@@ -103,9 +103,6 @@ class CustomRequest extends Request<JSONObject> {
     @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
         try {
-            if (mIsDebugOn){
-                Log.d("ServerResponse", response.toString());
-            }
             String jsonString = new String(response.data,
                     HttpHeaderParser.parseCharset(response.headers));
             return Response.success(new JSONObject(jsonString),

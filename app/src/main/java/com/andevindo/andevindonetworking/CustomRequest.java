@@ -8,6 +8,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 
@@ -87,6 +88,14 @@ class CustomRequest extends Request<JSONObject> {
     }
 
     @Override
+    protected VolleyError parseNetworkError(VolleyError volleyError) {
+        if (mIsDebugOn){
+            Log.d("ServerResponse", volleyError.networkResponse.toString());
+        }
+        return super.parseNetworkError(volleyError);
+    }
+
+    @Override
     protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
         try {
             if (mIsDebugOn){
@@ -107,4 +116,6 @@ class CustomRequest extends Request<JSONObject> {
     protected void deliverResponse(JSONObject response) {
         mListener.onResponse(response);
     }
+
+
 }

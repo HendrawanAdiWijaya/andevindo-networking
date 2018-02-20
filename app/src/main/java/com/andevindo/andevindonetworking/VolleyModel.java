@@ -69,10 +69,6 @@ public class VolleyModel<T extends NetworkModel> {
         return mUrl;
     }
 
-    public void setUrl(String url) {
-        mUrl = mUrl + url;
-    }
-
     public HttpEntity getHttpEntity() {
         return mHttpEntity;
     }
@@ -83,12 +79,64 @@ public class VolleyModel<T extends NetworkModel> {
 
     public void setParameter(Map<String, String> parameter) {
         mParameter = parameter;
+        mMultipartEntityBuilder = null;
+    }
+
+    public void setParameter(MultiPartEntityBuilder multiPartEntityBuilder) {
+        multiPartEntityBuilder = multiPartEntityBuilder;
+        mParameter = null;
     }
 
     public void addParameter(String key, String value) {
-        if (mParameter == null)
-            mParameter = new HashMap<>();
-        mParameter.put(key, value);
+        if (mMultipartEntityBuilder!=null){
+            mMultipartEntityBuilder.addTextBody(key, value);
+            mHttpEntity = mMultipartEntityBuilder.build();
+        }else{
+            mParameter.put(key, value);
+        }
+    }
+
+    public void addParameter(String key, int value) {
+       if (mMultipartEntityBuilder!=null){
+            mMultipartEntityBuilder.addTextBody(key, value + "");
+            mHttpEntity = mMultipartEntityBuilder.build();
+        }else{
+            mParameter.put(key, value + "");
+        }
+    }
+
+    public void addParameter(String key, float value) {
+        if (mMultipartEntityBuilder!=null){
+            mMultipartEntityBuilder.addTextBody(key, value + "");
+            mHttpEntity = mMultipartEntityBuilder.build();
+        }else{
+            mParameter.put(key, value + "");
+        }
+    }
+
+    public void addParameter(String key, double value) {
+        if (mMultipartEntityBuilder!=null){
+            mMultipartEntityBuilder.addTextBody(key, value + "");
+            mHttpEntity = mMultipartEntityBuilder.build();
+        }else{
+            mParameter.put(key, value + "");
+        }
+    }
+
+    public void addParameter(String key, boolean value) {
+        if (mMultipartEntityBuilder!=null){
+            mMultipartEntityBuilder.addTextBody(key, value + "");
+            mHttpEntity = mMultipartEntityBuilder.build();
+        }else{
+            mParameter.put(key, value + "");
+        }
+    }
+
+    public void addParameter(String key, File value) {
+        if (mMultipartEntityBuilder!=null){
+            mMultipartEntityBuilder.addTextBody(key, value + "");
+            mHttpEntity = mMultipartEntityBuilder.build();
+        }
     }
 
     public void setHeaders(Map<String, String> headers) {
@@ -180,8 +228,12 @@ public class VolleyModel<T extends NetworkModel> {
         }
 
         public MultiPartEntityBuilder addParameter(String key, File file) {
-            FileBody fileBody = new FileBody(file);
-            mMultipartEntityBuilder.addPart(key, fileBody);
+            if (file!=null){
+                FileBody fileBody = new FileBody(file);
+                mMultipartEntityBuilder.addPart(key, fileBody);
+            }else{
+                mMultipartEntityBuilder.addPart(key, null);
+            }
             return this;
         }
 

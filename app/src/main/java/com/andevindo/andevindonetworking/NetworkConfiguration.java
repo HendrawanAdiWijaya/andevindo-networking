@@ -1,5 +1,7 @@
 package com.andevindo.andevindonetworking;
 
+import java.util.Map;
+
 /**
  * Created by heendher on 11/3/2016.
  */
@@ -8,15 +10,22 @@ public class NetworkConfiguration {
 
     private int mSocketTimeOut;
     private int mRetries;
-    private int mSuccessCode;
     private String mAPIAddress;
-    private String mJSONKeyResult;
+    private Map<String, String> mHeaders;
 
     private NetworkConfiguration(Builder builder){
         mSocketTimeOut = builder.mSocketTimeOut;
         mRetries = builder.mRetries;
-        mSuccessCode = builder.mSuccessCode;
         mAPIAddress = builder.mAPIAddress;
+        mHeaders = builder.mHeaders;
+    }
+
+    public Map<String, String> getHeaders() {
+        return mHeaders;
+    }
+
+    public void setHeaders(Map<String, String> headers) {
+        mHeaders = headers;
     }
 
     public int getSocketTimeOut() {
@@ -35,14 +44,6 @@ public class NetworkConfiguration {
         mRetries = retries;
     }
 
-    public int getSuccessCode() {
-        return mSuccessCode;
-    }
-
-    public void setSuccessCode(int successCode) {
-        mSuccessCode = successCode;
-    }
-
     public String getAPIAddress() {
         return mAPIAddress;
     }
@@ -55,15 +56,19 @@ public class NetworkConfiguration {
 
         private int mSocketTimeOut = Network.getSocketTimeOut();
         private int mRetries = Network.getRetries();
-        private int mSuccessCode = Network.getSuccessCode();
         private String mAPIAddress = Network.getAPIAddress();
-        private String mJSONKeyResult = Network.getJSONKeyResult();
+        private Map<String, String> mHeaders = null;
 
         public Builder() {
         }
 
-        public void setJSONKeyResult(String JSONKeyResult) {
-            mJSONKeyResult = JSONKeyResult;
+        public Builder(String APIAddress) {
+            mAPIAddress = APIAddress;
+        }
+
+        public Builder setHeaders(Map<String, String> headers) {
+            mHeaders = headers;
+            return this;
         }
 
         public Builder setSocketTimeOut(int socketTimeOut){
@@ -73,16 +78,6 @@ public class NetworkConfiguration {
 
         public Builder setRetries(int retries){
             mRetries = retries;
-            return this;
-        }
-
-        public Builder setSuccessCode(int successCode){
-            mSuccessCode = successCode;
-            return this;
-        }
-
-        public Builder setAPIAddress(String apiAddress){
-            mAPIAddress = apiAddress;
             return this;
         }
 

@@ -21,9 +21,7 @@ public class VolleyModel<T extends NetworkModel> {
     private HttpEntity mHttpEntity;
     private NetworkMethod mNetworkMethod;
     private MultipartEntityBuilder mMultipartEntityBuilder;
-    private boolean mIsList = false;
-    private BaseAPIListener mBaseAPIListener;
-    //private int[] mResponseCodes = new int[1];
+    private boolean isUsingHeader;
     private String mExtraUrl;
 
     private VolleyModel(ParameterBuilder parameterBuilder) {
@@ -32,7 +30,7 @@ public class VolleyModel<T extends NetworkModel> {
         mParameter = parameterBuilder.mParameter;
         mHeaders = parameterBuilder.mHeaders;
         mNetworkMethod = parameterBuilder.mNetworkMethod;
-        //mResponseCodes = parameterBuilder.mResponseCodes;
+        isUsingHeader = parameterBuilder.isUsingHeader;
     }
 
     private VolleyModel(MultiPartEntityBuilder multiPartEntityBuilder) {
@@ -42,7 +40,11 @@ public class VolleyModel<T extends NetworkModel> {
         mMultipartEntityBuilder = multiPartEntityBuilder.mMultipartEntityBuilder;
         mHeaders = multiPartEntityBuilder.mHeaders;
         mNetworkMethod = multiPartEntityBuilder.mNetworkMethod;
-        //mResponseCodes = multiPartEntityBuilder.mResponseCodes;
+        isUsingHeader = multiPartEntityBuilder.isUsingHeader;
+    }
+
+    public boolean isUsingHeader() {
+        return isUsingHeader;
     }
 
     public void addString(String key, String value) {
@@ -54,10 +56,6 @@ public class VolleyModel<T extends NetworkModel> {
         mUrl = baseURL;
         mUrl += mExtraUrl;
     }
-
-    /*public int[] getResponseCodes() {
-        return mResponseCodes;
-    }*/
 
     public NetworkMethod getNetworkMethod() {
         return mNetworkMethod;
@@ -106,6 +104,7 @@ public class VolleyModel<T extends NetworkModel> {
         private Map<String, String> mHeaders;
         private String mUrl;
         private NetworkMethod mNetworkMethod = NetworkMethod.GET;
+        private boolean isUsingHeader;
         //private int[] mResponseCodes = new int[1];
 
         public ParameterBuilder(String url) {
@@ -152,6 +151,11 @@ public class VolleyModel<T extends NetworkModel> {
             return this;
         }
 
+        public ParameterBuilder setUsingHeader(boolean usingHeader) {
+            isUsingHeader = usingHeader;
+            return this;
+        }
+
         public ParameterBuilder setHeaders(Map<String, String> headers) {
             mHeaders = headers;
             return this;
@@ -168,7 +172,7 @@ public class VolleyModel<T extends NetworkModel> {
         private Map<String, String> mHeaders;
         private String mUrl;
         private NetworkMethod mNetworkMethod = NetworkMethod.POST;
-        //private int[] mResponseCodes = new int[1];
+        private boolean isUsingHeader;
 
         public MultiPartEntityBuilder(String url) {
             mUrl = url;
@@ -206,15 +210,15 @@ public class VolleyModel<T extends NetworkModel> {
             return this;
         }
 
+        public MultiPartEntityBuilder setUsingHeader(boolean usingHeader) {
+            isUsingHeader = usingHeader;
+            return this;
+        }
+
         public MultiPartEntityBuilder setHeaders(Map<String, String> headers) {
             mHeaders = headers;
             return this;
         }
-
-        /*public MultiPartEntityBuilder setResponseCodes(int... responseCodes){
-            mResponseCodes= responseCodes;
-            return this;
-        }*/
 
         public VolleyModel build() {
             mHttpEntity = mMultipartEntityBuilder.build();

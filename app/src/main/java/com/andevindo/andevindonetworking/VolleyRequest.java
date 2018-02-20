@@ -12,6 +12,8 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 /**
  * Created by -Andevindo- on 10/8/2015.
  */
@@ -50,29 +52,19 @@ public class VolleyRequest {
             method = Request.Method.PUT;
         else
             method = Request.Method.DELETE;
-        mCustomRequest = new CustomRequest(method, volleyModel.getUrl(), volleyModel.getHeaders(),
+        Map<String, String> header;
+        if (volleyModel.isUsingHeader()){
+            header = volleyModel.getHeaders();
+        }else{
+            header = networkConfiguration.getHeaders();
+        }
+        mCustomRequest = new CustomRequest(method, volleyModel.getUrl(), header,
                 volleyModel.getParameter(), volleyModel.getHttpEntity(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 if (listener != null) {
                     listener.onResponse(response);
                     return;
-                }
-                try {
-                    if (checkCode(response, Network.getSuccessCode())) {
-                        if (successListener != null)
-                            successListener.onSuccess(response, tag);
-
-                    } else {
-                        if (successListener != null)
-                            successListener.onOtherResponse(response, tag);
-                    }
-                } catch (JSONException e) {
-                    Log.d("VolleyResponse", tag + ":" + "Parse Error");
-                    if (volleyErrorListener != null)
-                        volleyErrorListener.onParseError(tag);
-                    if (globalListener != null)
-                        globalListener.onErrorGlobalListener(tag);
                 }
             }
         }, new Response.ErrorListener() {

@@ -1,5 +1,7 @@
 package com.andevindo.andevindonetworking;
 
+import java.util.Map;
+
 /**
  * Created by -H- on 12/16/2015.
  */
@@ -15,4 +17,5 @@ public class NetworkConfig {
 
     public static String PREFERENCES_NAME = "com.andevindo";
     public static String API_ADDRESS = "andevindo.com";
+    public static Map<String, String> HEADER = null;
 }

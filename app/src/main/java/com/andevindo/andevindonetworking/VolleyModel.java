@@ -45,12 +45,12 @@ public class VolleyModel<T extends NetworkModel> {
         //mResponseCodes = multiPartEntityBuilder.mResponseCodes;
     }
 
-    public void addString(String key, String value){
+    public void addString(String key, String value) {
         mMultipartEntityBuilder.addTextBody(key, value);
         mHttpEntity = mMultipartEntityBuilder.build();
     }
 
-    public void setCustomBaseURL(String baseURL){
+    public void setCustomBaseURL(String baseURL) {
         mUrl = baseURL;
         mUrl += mExtraUrl;
     }
@@ -75,7 +75,7 @@ public class VolleyModel<T extends NetworkModel> {
         mUrl = mUrl + url;
     }
 
-    public HttpEntity getHttpEntity(){
+    public HttpEntity getHttpEntity() {
         return mHttpEntity;
     }
 
@@ -87,17 +87,17 @@ public class VolleyModel<T extends NetworkModel> {
         mParameter = parameter;
     }
 
-    public void addParameter(String key, String value){
-        if (mParameter==null)
+    public void addParameter(String key, String value) {
+        if (mParameter == null)
             mParameter = new HashMap<>();
         mParameter.put(key, value);
     }
 
-    public void setHeaders(Map<String, String> headers){
+    public void setHeaders(Map<String, String> headers) {
         mHeaders = headers;
     }
 
-    public Map<String, String> getHeaders(){
+    public Map<String, String> getHeaders() {
         return mHeaders;
     }
 
@@ -108,13 +108,8 @@ public class VolleyModel<T extends NetworkModel> {
         private NetworkMethod mNetworkMethod = NetworkMethod.GET;
         //private int[] mResponseCodes = new int[1];
 
-        public ParameterBuilder(String url){
+        public ParameterBuilder(String url) {
             mUrl = url;
-        }
-
-        public ParameterBuilder(String url, NetworkMethod networkMethod) {
-            mUrl = url;
-            mNetworkMethod = networkMethod;
         }
 
         public ParameterBuilder setNetworkMethod(NetworkMethod networkMethod) {
@@ -122,24 +117,47 @@ public class VolleyModel<T extends NetworkModel> {
             return this;
         }
 
-        public ParameterBuilder addParameter(String key, String value){
-            if (mParameter==null)
+        public ParameterBuilder addParameter(String key, String value) {
+            if (mParameter == null)
                 mParameter = new HashMap<>();
             mParameter.put(key, value);
             return this;
         }
 
-        public ParameterBuilder setHeaders(Map<String, String> headers){
+        public ParameterBuilder addParameter(String key, int value) {
+            if (mParameter == null)
+                mParameter = new HashMap<>();
+            mParameter.put(key, value + "");
+            return this;
+        }
+
+        public ParameterBuilder addParameter(String key, float value) {
+            if (mParameter == null)
+                mParameter = new HashMap<>();
+            mParameter.put(key, value + "");
+            return this;
+        }
+
+        public ParameterBuilder addParameter(String key, double value) {
+            if (mParameter == null)
+                mParameter = new HashMap<>();
+            mParameter.put(key, value + "");
+            return this;
+        }
+
+        public ParameterBuilder addParameter(String key, boolean value) {
+            if (mParameter == null)
+                mParameter = new HashMap<>();
+            mParameter.put(key, value + "");
+            return this;
+        }
+
+        public ParameterBuilder setHeaders(Map<String, String> headers) {
             mHeaders = headers;
             return this;
         }
 
-        /*public ParameterBuilder setResponseCodes(int... responseCodes){
-            mResponseCodes= responseCodes;
-            return this;
-        }*/
-
-        public VolleyModel build(){
+        public VolleyModel build() {
             return new VolleyModel(this);
         }
     }
@@ -152,23 +170,43 @@ public class VolleyModel<T extends NetworkModel> {
         private NetworkMethod mNetworkMethod = NetworkMethod.POST;
         //private int[] mResponseCodes = new int[1];
 
-        public MultiPartEntityBuilder(String url){
+        public MultiPartEntityBuilder(String url) {
             mUrl = url;
             mMultipartEntityBuilder = MultipartEntityBuilder.create();
         }
 
-        public MultiPartEntityBuilder addFile(String key, File file){
+        public MultiPartEntityBuilder addParameter(String key, File file) {
             FileBody fileBody = new FileBody(file);
             mMultipartEntityBuilder.addPart(key, fileBody);
             return this;
         }
 
-        public MultiPartEntityBuilder addString(String key, String value){
+        public MultiPartEntityBuilder addParameter(String key, String value) {
             mMultipartEntityBuilder.addTextBody(key, value);
             return this;
         }
 
-        public MultiPartEntityBuilder setHeaders(Map<String, String> headers){
+        public MultiPartEntityBuilder addParameter(String key, int value) {
+            mMultipartEntityBuilder.addTextBody(key, value + "");
+            return this;
+        }
+
+        public MultiPartEntityBuilder addParameter(String key, boolean value) {
+            mMultipartEntityBuilder.addTextBody(key, value + "");
+            return this;
+        }
+
+        public MultiPartEntityBuilder addParameter(String key, float value) {
+            mMultipartEntityBuilder.addTextBody(key, value + "");
+            return this;
+        }
+
+        public MultiPartEntityBuilder addParameter(String key, double value) {
+            mMultipartEntityBuilder.addTextBody(key, value + "");
+            return this;
+        }
+
+        public MultiPartEntityBuilder setHeaders(Map<String, String> headers) {
             mHeaders = headers;
             return this;
         }
@@ -178,7 +216,7 @@ public class VolleyModel<T extends NetworkModel> {
             return this;
         }*/
 
-        public VolleyModel build(){
+        public VolleyModel build() {
             mHttpEntity = mMultipartEntityBuilder.build();
             return new VolleyModel(this);
         }

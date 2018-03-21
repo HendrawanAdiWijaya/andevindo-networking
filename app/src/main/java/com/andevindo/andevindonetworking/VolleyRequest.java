@@ -52,11 +52,13 @@ public class VolleyRequest {
             method = Request.Method.PUT;
         else
             method = Request.Method.DELETE;
-        Map<String, String> header;
+        Map<String, String> header = null;
         if (volleyModel.isUsingHeader()){
-            header = volleyModel.getHeaders();
-        }else{
-            header = networkConfiguration.getHeaders();
+            if (volleyModel.getHeaders()==null){
+                header = networkConfiguration.getHeaders();
+            }else{
+                header = volleyModel.getHeaders();
+            }
         }
         mCustomRequest = new CustomRequest(method, volleyModel.getUrl(), header,
                 volleyModel.getParameter(), volleyModel.getHttpEntity(), new Response.Listener<JSONObject>() {

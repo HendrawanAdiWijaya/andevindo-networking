@@ -57,7 +57,7 @@ public class NetworkConfiguration {
         private int mSocketTimeOut = Network.getSocketTimeOut();
         private int mRetries = Network.getRetries();
         private String mAPIAddress = Network.getAPIAddress();
-        private Map<String, String> mHeaders = null;
+        private Map<String, String> mHeaders = Network.getHeader();
 
         public Builder() {
         }

@@ -37,6 +37,10 @@ public class Network {
         VolleySingleton.initialize(context);
     }
 
+    public static Map<String, String> getHeader(){
+        return sHEADER;
+    }
+
     public static int getSocketTimeOut() {
         return sSOCKET_TIME_OUT;
     }

@@ -34,6 +34,7 @@ class CustomRequest extends Request<JSONObject> {
     private Map<String, String> mHeaders;
     private HttpEntity mHttpEntity;
     private boolean mIsDebugOn;
+    private int mMethod;
 
     public CustomRequest(int method, String url, Map<String, String> headers, Map<String, String> params,
                          HttpEntity httpEntity, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener, boolean isDebugOn) {
@@ -75,6 +76,8 @@ class CustomRequest extends Request<JSONObject> {
     public String getBodyContentType() {
         if (mHttpEntity != null)
             return mHttpEntity.getContentType().getValue();
+        else if (getMethod() == Method.PUT)
+            return "application/x-www-form-urlencoded; charset=UTF-8";
         else
             return super.getBodyContentType();
     }
@@ -91,13 +94,13 @@ class CustomRequest extends Request<JSONObject> {
     public void deliverError(VolleyError error) {
         super.deliverError(error);
         Log.d("SerResponse", "OnDeliver");
-        if (mIsDebugOn&&error!=null&&error.networkResponse!=null&&error.networkResponse.data!=null){
+        if (mIsDebugOn && error != null && error.networkResponse != null && error.networkResponse.data != null) {
             try {
                 Log.d("ServerResponse", new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers)));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
                 Log.d("ServerResponse", new String(error.networkResponse.data));
-            } catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 Log.d("ServerResponse", "Null");
             }
         }

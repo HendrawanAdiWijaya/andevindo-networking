@@ -1,7 +1,5 @@
 package com.andevindo.andevindonetworking;
 
-import org.json.JSONObject;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,8 +19,9 @@ public class VolleyModel<T extends NetworkModel> {
     private HttpEntity mHttpEntity;
     private NetworkMethod mNetworkMethod;
     private MultipartEntityBuilder mMultipartEntityBuilder;
-    private boolean isUsingHeader;
+    private boolean mIsUsingHeader;
     private String mExtraUrl;
+    private boolean mIsUsingParameter;
 
     private VolleyModel(ParameterBuilder parameterBuilder) {
         mUrl += parameterBuilder.mUrl;
@@ -30,7 +29,8 @@ public class VolleyModel<T extends NetworkModel> {
         mParameter = parameterBuilder.mParameter;
         mHeaders = parameterBuilder.mHeaders;
         mNetworkMethod = parameterBuilder.mNetworkMethod;
-        isUsingHeader = parameterBuilder.isUsingHeader;
+        mIsUsingHeader = parameterBuilder.isUsingHeader;
+        mIsUsingParameter = true;
     }
 
     private VolleyModel(MultiPartEntityBuilder multiPartEntityBuilder) {
@@ -40,11 +40,12 @@ public class VolleyModel<T extends NetworkModel> {
         mMultipartEntityBuilder = multiPartEntityBuilder.mMultipartEntityBuilder;
         mHeaders = multiPartEntityBuilder.mHeaders;
         mNetworkMethod = multiPartEntityBuilder.mNetworkMethod;
-        isUsingHeader = multiPartEntityBuilder.isUsingHeader;
+        mIsUsingHeader = multiPartEntityBuilder.isUsingHeader;
+        mIsUsingParameter = false;
     }
 
     public boolean isUsingHeader() {
-        return isUsingHeader;
+        return mIsUsingHeader;
     }
 
     public void addString(String key, String value) {
@@ -87,56 +88,39 @@ public class VolleyModel<T extends NetworkModel> {
         mParameter = null;
     }
 
-    public void addParameter(String key, String value) {
-        if (mMultipartEntityBuilder!=null){
+    void addParameterLocal(String key, String value){
+        if (mIsUsingParameter){
+            if (mParameter==null)
+                mParameter = new HashMap<>();
+            mParameter.put(key, value);
+        }else{
             mMultipartEntityBuilder.addTextBody(key, value);
             mHttpEntity = mMultipartEntityBuilder.build();
-        }else{
-            mParameter.put(key, value);
         }
+    }
+
+    public void addParameter(String key, String value) {
+        addParameterLocal(key, value);
     }
 
     public void addParameter(String key, int value) {
-       if (mMultipartEntityBuilder!=null){
-            mMultipartEntityBuilder.addTextBody(key, value + "");
-            mHttpEntity = mMultipartEntityBuilder.build();
-        }else{
-            mParameter.put(key, value + "");
-        }
+        addParameterLocal(key, value + "");
     }
 
     public void addParameter(String key, float value) {
-        if (mMultipartEntityBuilder!=null){
-            mMultipartEntityBuilder.addTextBody(key, value + "");
-            mHttpEntity = mMultipartEntityBuilder.build();
-        }else{
-            mParameter.put(key, value + "");
-        }
+        addParameterLocal(key, value + "");
     }
 
     public void addParameter(String key, double value) {
-        if (mMultipartEntityBuilder!=null){
-            mMultipartEntityBuilder.addTextBody(key, value + "");
-            mHttpEntity = mMultipartEntityBuilder.build();
-        }else{
-            mParameter.put(key, value + "");
-        }
+        addParameterLocal(key, value + "");
     }
 
     public void addParameter(String key, boolean value) {
-        if (mMultipartEntityBuilder!=null){
-            mMultipartEntityBuilder.addTextBody(key, value + "");
-            mHttpEntity = mMultipartEntityBuilder.build();
-        }else{
-            mParameter.put(key, value + "");
-        }
+        addParameterLocal(key, value + "");
     }
 
     public void addParameter(String key, File value) {
-        if (mMultipartEntityBuilder!=null){
-            mMultipartEntityBuilder.addTextBody(key, value + "");
-            mHttpEntity = mMultipartEntityBuilder.build();
-        }
+        addParameterLocal(key, value + "");
     }
 
     public void setHeaders(Map<String, String> headers) {

@@ -67,7 +67,26 @@ public class VolleyModel<T extends NetworkModel> {
     }
 
     public String getUrl() {
-        return mUrl;
+        if (mNetworkMethod == NetworkMethod.GET) {
+            if (mParameter != null) {
+                int index = 0;
+                int parameterSize = mParameter.size();
+                for (Map.Entry<String, String> parameter : mParameter.entrySet()) {
+                    if (index++ == 0) {
+                        mUrl += "?";
+                    }
+                    mUrl += parameter.getKey() + "=" + parameter.getValue();
+
+                    if (index != parameterSize - 1) {
+                        mUrl += "&";
+                    }
+                }
+            }
+            return mUrl;
+        } else {
+            return mUrl;
+        }
+
     }
 
     public HttpEntity getHttpEntity() {
@@ -75,7 +94,10 @@ public class VolleyModel<T extends NetworkModel> {
     }
 
     public Map<String, String> getParameter() {
-        return mParameter;
+        if (mNetworkMethod == NetworkMethod.GET)
+            return null;
+        else
+            return mParameter;
     }
 
     public void setParameter(Map<String, String> parameter) {
@@ -88,12 +110,12 @@ public class VolleyModel<T extends NetworkModel> {
         mParameter = null;
     }
 
-    void addParameterLocal(String key, String value){
-        if (mIsUsingParameter){
-            if (mParameter==null)
+    void addParameterLocal(String key, String value) {
+        if (mIsUsingParameter) {
+            if (mParameter == null)
                 mParameter = new HashMap<>();
             mParameter.put(key, value);
-        }else{
+        } else {
             mMultipartEntityBuilder.addTextBody(key, value);
             mHttpEntity = mMultipartEntityBuilder.build();
         }
@@ -143,44 +165,36 @@ public class VolleyModel<T extends NetworkModel> {
             mUrl = url;
         }
 
-        public ParameterBuilder setNetworkMethod(NetworkMethod networkMethod) {
-            mNetworkMethod = networkMethod;
-            return this;
-        }
-
-        public ParameterBuilder addParameter(String key, String value) {
+        public ParameterBuilder addParameterLocal(String key, String value) {
             if (mParameter == null)
                 mParameter = new HashMap<>();
             mParameter.put(key, value);
             return this;
         }
 
-        public ParameterBuilder addParameter(String key, int value) {
-            if (mParameter == null)
-                mParameter = new HashMap<>();
-            mParameter.put(key, value + "");
+        public ParameterBuilder setNetworkMethod(NetworkMethod networkMethod) {
+            mNetworkMethod = networkMethod;
             return this;
+        }
+
+        public ParameterBuilder addParameter(String key, String value) {
+            return addParameterLocal(key, value);
+        }
+
+        public ParameterBuilder addParameter(String key, int value) {
+            return addParameterLocal(key, value + "");
         }
 
         public ParameterBuilder addParameter(String key, float value) {
-            if (mParameter == null)
-                mParameter = new HashMap<>();
-            mParameter.put(key, value + "");
-            return this;
+            return addParameterLocal(key, value + "");
         }
 
         public ParameterBuilder addParameter(String key, double value) {
-            if (mParameter == null)
-                mParameter = new HashMap<>();
-            mParameter.put(key, value + "");
-            return this;
+            return addParameterLocal(key, value + "");
         }
 
         public ParameterBuilder addParameter(String key, boolean value) {
-            if (mParameter == null)
-                mParameter = new HashMap<>();
-            mParameter.put(key, value + "");
-            return this;
+            return addParameterLocal(key, value + "");
         }
 
         public ParameterBuilder setUsingHeader(boolean usingHeader) {
@@ -212,10 +226,10 @@ public class VolleyModel<T extends NetworkModel> {
         }
 
         public MultiPartEntityBuilder addParameter(String key, File file) {
-            if (file!=null){
+            if (file != null) {
                 FileBody fileBody = new FileBody(file);
                 mMultipartEntityBuilder.addPart(key, fileBody);
-            }else{
+            } else {
                 mMultipartEntityBuilder.addPart(key, null);
             }
             return this;

@@ -72,12 +72,12 @@ public class VolleyModel<T extends NetworkModel> {
                 int index = 0;
                 int parameterSize = mParameter.size();
                 for (Map.Entry<String, String> parameter : mParameter.entrySet()) {
-                    if (index++ == 0) {
+                    if (index == 0) {
                         mUrl += "?";
                     }
                     mUrl += parameter.getKey() + "=" + parameter.getValue();
 
-                    if (index != parameterSize - 1) {
+                    if (index++ != parameterSize - 1) {
                         mUrl += "&";
                     }
                 }

@@ -1,6 +1,8 @@
 package com.andevindo.andevindonetworking;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +77,11 @@ public class VolleyModel<T extends NetworkModel> {
                     if (index == 0) {
                         mUrl += "?";
                     }
-                    mUrl += parameter.getKey() + "=" + parameter.getValue();
+                    try {
+                        mUrl += parameter.getKey() + "=" + URLEncoder.encode(parameter.getValue(), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        mUrl += parameter.getKey() + "=" + parameter.getValue();
+                    }
 
                     if (index++ != parameterSize - 1) {
                         mUrl += "&";

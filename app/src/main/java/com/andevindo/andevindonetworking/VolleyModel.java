@@ -57,11 +57,6 @@ public class VolleyModel<T extends NetworkModel> {
         return mIsUsingHeader;
     }
 
-    public void addString(String key, String value) {
-        mMultipartEntityBuilder.addTextBody(key, value);
-        mHttpEntity = mMultipartEntityBuilder.build();
-    }
-
     public void setCustomBaseURL(String baseURL) {
         mUrl = baseURL;
         mUrl += mExtraUrl;
@@ -103,9 +98,10 @@ public class VolleyModel<T extends NetworkModel> {
     }
 
     public HttpEntity getHttpEntity() {
-        for (Map.Entry<String, String> parameter : mParameters.entrySet()) {
-            mMultipartEntityBuilder.addTextBody(parameter.getKey(), parameter.getValue());
-        }
+        if (mParameters != null)
+            for (Map.Entry<String, String> parameter : mParameters.entrySet()) {
+                mMultipartEntityBuilder.addTextBody(parameter.getKey(), parameter.getValue());
+            }
         return mMultipartEntityBuilder.build();
     }
 
@@ -117,14 +113,9 @@ public class VolleyModel<T extends NetworkModel> {
     }
 
     void addParameterLocal(String key, String value) {
-        if (mIsUsingParameter) {
-            if (mParameters == null)
-                mParameters = new HashMap<>();
-            mParameters.put(key, value);
-        } else {
-            mMultipartEntityBuilder.addTextBody(key, value);
-            mHttpEntity = mMultipartEntityBuilder.build();
-        }
+        if (mParameters == null)
+            mParameters = new HashMap<>();
+        mParameters.put(key, value);
     }
 
     public void addParameter(String key, String value) {
@@ -231,9 +222,9 @@ public class VolleyModel<T extends NetworkModel> {
         public ParameterBuilder setNetworkMethod(NetworkMethod networkMethod, boolean isUsingLaravelWebService) {
             mNetworkMethod = networkMethod;
             mIsUsingLaravelWebService = isUsingLaravelWebService;
-            if (networkMethod==NetworkMethod.PUT && isUsingLaravelWebService)
-            addParameter("_method", "PUT");
-            else if (networkMethod==NetworkMethod.DELETE && isUsingLaravelWebService)
+            if (networkMethod == NetworkMethod.PUT && isUsingLaravelWebService)
+                addParameter("_method", "PUT");
+            else if (networkMethod == NetworkMethod.DELETE && isUsingLaravelWebService)
                 addParameter("_method", "DELETE");
             return this;
         }

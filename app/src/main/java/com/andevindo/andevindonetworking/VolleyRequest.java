@@ -44,8 +44,8 @@ public class VolleyRequest {
                             boolean isDebugOn) {
         int method;
         if (volleyModel.getNetworkMethod() == NetworkMethod.POST
-                && (volleyModel.getNetworkMethod() == NetworkMethod.PUT && volleyModel.isUsingLaravelWebService())
-                && (volleyModel.getNetworkMethod() == NetworkMethod.DELETE && volleyModel.isUsingLaravelWebService()))
+                || (volleyModel.getNetworkMethod() == NetworkMethod.PUT && volleyModel.isUsingLaravelWebService())
+                || (volleyModel.getNetworkMethod() == NetworkMethod.DELETE && volleyModel.isUsingLaravelWebService()))
             method = Request.Method.POST;
         else if (volleyModel.getNetworkMethod() == NetworkMethod.GET)
             method = Request.Method.GET;

@@ -1,6 +1,5 @@
 package com.andevindo.andevindonetworking;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -44,7 +43,9 @@ public class VolleyRequest {
                             NetworkConfiguration networkConfiguration,
                             boolean isDebugOn) {
         int method;
-        if (volleyModel.getNetworkMethod() == NetworkMethod.POST)
+        if (volleyModel.getNetworkMethod() == NetworkMethod.POST
+                && (volleyModel.getNetworkMethod() == NetworkMethod.PUT && volleyModel.isUsingLaravelWebService())
+                && (volleyModel.getNetworkMethod() == NetworkMethod.DELETE && volleyModel.isUsingLaravelWebService()))
             method = Request.Method.POST;
         else if (volleyModel.getNetworkMethod() == NetworkMethod.GET)
             method = Request.Method.GET;
@@ -61,7 +62,7 @@ public class VolleyRequest {
             }
         }
         mCustomRequest = new CustomRequest(method, volleyModel.getUrl(), header,
-                volleyModel.getParameter(), volleyModel.getHttpEntity(), new Response.Listener<JSONObject>() {
+                volleyModel.getParameters(), volleyModel.getHttpEntity(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 if (listener != null) {

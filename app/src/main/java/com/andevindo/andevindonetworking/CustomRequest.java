@@ -76,19 +76,17 @@ class CustomRequest extends Request<JSONObject> {
     public String getBodyContentType() {
         if (mHttpEntity != null)
             return mHttpEntity.getContentType().getValue();
-        else if (getMethod() == Method.PUT)
-            return "application/x-www-form-urlencoded; charset=UTF-8";
         else
             return super.getBodyContentType();
     }
 
-    @Override
+   /* @Override
     protected Map<String, String> getParams() throws AuthFailureError {
         if (mParams != null)
             return mParams;
         else
             return super.getParams();
-    }
+    }*/
 
     @Override
     public void deliverError(VolleyError error) {

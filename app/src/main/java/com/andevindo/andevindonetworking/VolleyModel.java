@@ -16,7 +16,7 @@ import cz.msebera.android.httpclient.entity.mime.content.FileBody;
 public class VolleyModel<T extends NetworkModel> {
 
     private String mUrl = Network.getAPIAddress();
-    private Map<String, String> mParameter;
+    private Map<String, String> mParameters;
     private Map<String, String> mHeaders;
     private HttpEntity mHttpEntity;
     private NetworkMethod mNetworkMethod;
@@ -24,25 +24,32 @@ public class VolleyModel<T extends NetworkModel> {
     private boolean mIsUsingHeader;
     private String mExtraUrl;
     private boolean mIsUsingParameter;
+    private boolean mIsUsingLaravelWebService;
 
-    private VolleyModel(ParameterBuilder parameterBuilder) {
+    public boolean isUsingLaravelWebService() {
+        return mIsUsingLaravelWebService;
+    }
+
+    /* private VolleyModel(ParameterBuilder parameterBuilder) {
         mUrl += parameterBuilder.mUrl;
         mExtraUrl = parameterBuilder.mUrl;
-        mParameter = parameterBuilder.mParameter;
+        mParameters = parameterBuilder.mParameters;
         mHeaders = parameterBuilder.mHeaders;
         mNetworkMethod = parameterBuilder.mNetworkMethod;
         mIsUsingHeader = parameterBuilder.isUsingHeader;
         mIsUsingParameter = true;
-    }
+    }*/
 
-    private VolleyModel(MultiPartEntityBuilder multiPartEntityBuilder) {
-        mUrl += multiPartEntityBuilder.mUrl;
-        mExtraUrl = multiPartEntityBuilder.mUrl;
-        mHttpEntity = multiPartEntityBuilder.mHttpEntity;
-        mMultipartEntityBuilder = multiPartEntityBuilder.mMultipartEntityBuilder;
-        mHeaders = multiPartEntityBuilder.mHeaders;
-        mNetworkMethod = multiPartEntityBuilder.mNetworkMethod;
-        mIsUsingHeader = multiPartEntityBuilder.isUsingHeader;
+    private VolleyModel(ParameterBuilder parameterBuilder) {
+        mUrl += parameterBuilder.mUrl;
+        mIsUsingLaravelWebService = parameterBuilder.mIsUsingLaravelWebService;
+        mExtraUrl = parameterBuilder.mUrl;
+        mHttpEntity = parameterBuilder.mHttpEntity;
+        mMultipartEntityBuilder = parameterBuilder.mMultipartEntityBuilder;
+        mParameters = parameterBuilder.mParameters;
+        mHeaders = parameterBuilder.mHeaders;
+        mNetworkMethod = parameterBuilder.mNetworkMethod;
+        mIsUsingHeader = parameterBuilder.isUsingHeader;
         mIsUsingParameter = false;
     }
 
@@ -70,10 +77,10 @@ public class VolleyModel<T extends NetworkModel> {
 
     public String getUrl() {
         if (mNetworkMethod == NetworkMethod.GET) {
-            if (mParameter != null) {
+            if (mParameters != null) {
                 int index = 0;
-                int parameterSize = mParameter.size();
-                for (Map.Entry<String, String> parameter : mParameter.entrySet()) {
+                int parameterSize = mParameters.size();
+                for (Map.Entry<String, String> parameter : mParameters.entrySet()) {
                     if (index == 0) {
                         mUrl += "?";
                     }
@@ -96,31 +103,24 @@ public class VolleyModel<T extends NetworkModel> {
     }
 
     public HttpEntity getHttpEntity() {
-        return mHttpEntity;
+        for (Map.Entry<String, String> parameter : mParameters.entrySet()) {
+            mMultipartEntityBuilder.addTextBody(parameter.getKey(), parameter.getValue());
+        }
+        return mMultipartEntityBuilder.build();
     }
 
-    public Map<String, String> getParameter() {
+    public Map<String, String> getParameters() {
         if (mNetworkMethod == NetworkMethod.GET)
             return null;
         else
-            return mParameter;
-    }
-
-    public void setParameter(Map<String, String> parameter) {
-        mParameter = parameter;
-        mMultipartEntityBuilder = null;
-    }
-
-    public void setParameter(MultiPartEntityBuilder multiPartEntityBuilder) {
-        multiPartEntityBuilder = multiPartEntityBuilder;
-        mParameter = null;
+            return mParameters;
     }
 
     void addParameterLocal(String key, String value) {
         if (mIsUsingParameter) {
-            if (mParameter == null)
-                mParameter = new HashMap<>();
-            mParameter.put(key, value);
+            if (mParameters == null)
+                mParameters = new HashMap<>();
+            mParameters.put(key, value);
         } else {
             mMultipartEntityBuilder.addTextBody(key, value);
             mHttpEntity = mMultipartEntityBuilder.build();
@@ -159,8 +159,8 @@ public class VolleyModel<T extends NetworkModel> {
         return mHeaders;
     }
 
-    public static class ParameterBuilder {
-        private Map<String, String> mParameter;
+    /*public static class ParameterBuilder {
+        private Map<String, String> mParameters;
         private Map<String, String> mHeaders;
         private String mUrl;
         private NetworkMethod mNetworkMethod = NetworkMethod.GET;
@@ -172,9 +172,9 @@ public class VolleyModel<T extends NetworkModel> {
         }
 
         public ParameterBuilder addParameterLocal(String key, String value) {
-            if (mParameter == null)
-                mParameter = new HashMap<>();
-            mParameter.put(key, value);
+            if (mParameters == null)
+                mParameters = new HashMap<>();
+            mParameters.put(key, value);
             return this;
         }
 
@@ -216,22 +216,34 @@ public class VolleyModel<T extends NetworkModel> {
         public VolleyModel build() {
             return new VolleyModel(this);
         }
-    }
+    }*/
 
-    public static class MultiPartEntityBuilder {
+    public static class ParameterBuilder {
         private MultipartEntityBuilder mMultipartEntityBuilder;
         private HttpEntity mHttpEntity;
         private Map<String, String> mHeaders;
+        private Map<String, String> mParameters;
         private String mUrl;
         private NetworkMethod mNetworkMethod = NetworkMethod.POST;
         private boolean isUsingHeader;
+        private boolean mIsUsingLaravelWebService;
 
-        public MultiPartEntityBuilder(String url) {
+        public ParameterBuilder setNetworkMethod(NetworkMethod networkMethod, boolean isUsingLaravelWebService) {
+            mNetworkMethod = networkMethod;
+            mIsUsingLaravelWebService = isUsingLaravelWebService;
+            if (networkMethod==NetworkMethod.PUT && isUsingLaravelWebService)
+            addParameter("_method", "PUT");
+            else if (networkMethod==NetworkMethod.DELETE && isUsingLaravelWebService)
+                addParameter("_method", "DELETE");
+            return this;
+        }
+
+        public ParameterBuilder(String url) {
             mUrl = url;
             mMultipartEntityBuilder = MultipartEntityBuilder.create();
         }
 
-        public MultiPartEntityBuilder addParameter(String key, File file) {
+        public ParameterBuilder addParameter(String key, File file) {
             if (file != null) {
                 FileBody fileBody = new FileBody(file);
                 mMultipartEntityBuilder.addPart(key, fileBody);
@@ -241,37 +253,44 @@ public class VolleyModel<T extends NetworkModel> {
             return this;
         }
 
-        public MultiPartEntityBuilder addParameter(String key, String value) {
-            mMultipartEntityBuilder.addTextBody(key, value);
+        public ParameterBuilder addParameterLocal(String key, String value) {
+            if (mParameters == null)
+                mParameters = new HashMap<>();
+            mParameters.put(key, value);
             return this;
         }
 
-        public MultiPartEntityBuilder addParameter(String key, int value) {
-            mMultipartEntityBuilder.addTextBody(key, value + "");
+        public ParameterBuilder setNetworkMethod(NetworkMethod networkMethod) {
+            mNetworkMethod = networkMethod;
             return this;
         }
 
-        public MultiPartEntityBuilder addParameter(String key, boolean value) {
-            mMultipartEntityBuilder.addTextBody(key, value + "");
-            return this;
+        public ParameterBuilder addParameter(String key, String value) {
+            return addParameterLocal(key, value);
         }
 
-        public MultiPartEntityBuilder addParameter(String key, float value) {
-            mMultipartEntityBuilder.addTextBody(key, value + "");
-            return this;
+        public ParameterBuilder addParameter(String key, int value) {
+            return addParameterLocal(key, value + "");
         }
 
-        public MultiPartEntityBuilder addParameter(String key, double value) {
-            mMultipartEntityBuilder.addTextBody(key, value + "");
-            return this;
+        public ParameterBuilder addParameter(String key, float value) {
+            return addParameterLocal(key, value + "");
         }
 
-        public MultiPartEntityBuilder setUsingHeader(boolean usingHeader) {
+        public ParameterBuilder addParameter(String key, double value) {
+            return addParameterLocal(key, value + "");
+        }
+
+        public ParameterBuilder addParameter(String key, boolean value) {
+            return addParameterLocal(key, value + "");
+        }
+
+        public ParameterBuilder setUsingHeader(boolean usingHeader) {
             isUsingHeader = usingHeader;
             return this;
         }
 
-        public MultiPartEntityBuilder setHeaders(Map<String, String> headers) {
+        public ParameterBuilder setHeaders(Map<String, String> headers) {
             mHeaders = headers;
             return this;
         }

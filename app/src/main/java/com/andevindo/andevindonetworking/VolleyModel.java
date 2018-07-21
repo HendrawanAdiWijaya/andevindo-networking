@@ -139,7 +139,10 @@ public class VolleyModel<T extends NetworkModel> {
     }
 
     public void addParameter(String key, File value) {
-        addParameterLocal(key, value + "");
+        if (value != null) {
+            FileBody fileBody = new FileBody(value);
+            mMultipartEntityBuilder.addPart(key, fileBody);
+        }
     }
 
     public void setHeaders(Map<String, String> headers) {
@@ -238,8 +241,6 @@ public class VolleyModel<T extends NetworkModel> {
             if (file != null) {
                 FileBody fileBody = new FileBody(file);
                 mMultipartEntityBuilder.addPart(key, fileBody);
-            } else {
-                mMultipartEntityBuilder.addPart(key, null);
             }
             return this;
         }

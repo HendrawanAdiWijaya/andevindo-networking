@@ -1,6 +1,5 @@
 package com.andevindo.andevindonetworking;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -18,7 +17,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.Map;
 
 import cz.msebera.android.httpclient.HttpEntity;
@@ -27,7 +25,7 @@ import cz.msebera.android.httpclient.HttpEntity;
 /**
  * Created by -Andevindo- on 10/8/2015.
  */
-class CustomRequest extends Request<JSONObject> {
+class CustomRequestJson extends Request<JSONObject> {
 
     private Response.Listener<JSONObject> mListener;
     private Map<String, String> mParams;
@@ -35,15 +33,17 @@ class CustomRequest extends Request<JSONObject> {
     private HttpEntity mHttpEntity;
     private boolean mIsDebugOn;
     private int mMethod;
+    private ProgressListener mProgressListener;
 
-    public CustomRequest(int method, String url, Map<String, String> headers, Map<String, String> params,
-                         HttpEntity httpEntity, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener, boolean isDebugOn) {
+    public CustomRequestJson(int method, String url, Map<String, String> headers, Map<String, String> params,
+                             HttpEntity httpEntity, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener, boolean isDebugOn, ProgressListener progressListener) {
         super(method, url, errorListener);
         mListener = responseListener;
         mParams = params;
         mHttpEntity = httpEntity;
         mHeaders = headers;
         mIsDebugOn = isDebugOn;
+        mProgressListener = progressListener;
     }
 
     @Override
@@ -51,7 +51,7 @@ class CustomRequest extends Request<JSONObject> {
         if (mHttpEntity != null) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             try {
-                mHttpEntity.writeTo(bos);
+                mHttpEntity.writeTo(new CountingOutputStream(bos, mHttpEntity.getContentLength(), mProgressListener));
                 return bos.toByteArray();
             } catch (IOException e) {
                 VolleyLog.e("" + e);

@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class VolleyRequest {
     private RequestQueue mRequestQueue;
-    private CustomRequest mCustomRequest;
+    private CustomRequestJson mCustomRequestJson;
 
     public VolleyRequest() {
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
@@ -41,7 +41,8 @@ public class VolleyRequest {
                             final VolleyListener.VolleyErrorListener volleyErrorListener,
                             final VolleyListener.VolleyErrorGlobalListener globalListener,
                             NetworkConfiguration networkConfiguration,
-                            boolean isDebugOn) {
+                            boolean isDebugOn,
+                            ProgressListener progressListener) {
         int method;
         if (volleyModel.getNetworkMethod() == NetworkMethod.POST
                 || (volleyModel.getNetworkMethod() == NetworkMethod.PUT && volleyModel.isUsingLaravelWebService())
@@ -61,7 +62,7 @@ public class VolleyRequest {
                 header = volleyModel.getHeaders();
             }
         }
-        mCustomRequest = new CustomRequest(method, volleyModel.getUrl(), header,
+        mCustomRequestJson = new CustomRequestJson(method, volleyModel.getUrl(), header,
                 volleyModel.getParameters(), volleyModel.getHttpEntity(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -85,17 +86,17 @@ public class VolleyRequest {
                 if (globalListener != null)
                     globalListener.onErrorGlobalListener(tag);
             }
-        }, isDebugOn);
+        }, isDebugOn, progressListener);
 
-        mCustomRequest.setRetryPolicy(new DefaultRetryPolicy(networkConfiguration.getSocketTimeOut(),
+        mCustomRequestJson.setRetryPolicy(new DefaultRetryPolicy(networkConfiguration.getSocketTimeOut(),
                 networkConfiguration.getRetries(), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        mCustomRequest.setTag(tag);
-        mRequestQueue.add(mCustomRequest);
+        mCustomRequestJson.setTag(tag);
+        mRequestQueue.add(mCustomRequestJson);
 
     }
 
     public void cancelAllRequest(String tag) {
-        if (mCustomRequest != null)
+        if (mCustomRequestJson != null)
             mRequestQueue.cancelAll(tag);
 
     }

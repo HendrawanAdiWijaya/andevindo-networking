@@ -7,10 +7,10 @@ import org.json.JSONObject;
  * Created by heendher on 11/3/2016.
  */
 
-public class VolleyListener {
+public class VolleyListener{
 
-    public interface VolleyRawJSONListener{
-        void doWork(JSONObject jsonObject, String tag);
+    public interface VolleyRawJSONListener<T>{
+        void doWork(T t, String tag);
     }
 
     public interface VolleySuccessListener {
@@ -19,8 +19,8 @@ public class VolleyListener {
 
     }
 
-    public interface VolleyResponseListener{
-        void doWork(JSONObject jsonObject, int responseCode, String tag);
+    public interface VolleyResponseListener<T>{
+        void doWork(T t, int responseCode, String tag);
     }
 
     public interface VolleyErrorListener {

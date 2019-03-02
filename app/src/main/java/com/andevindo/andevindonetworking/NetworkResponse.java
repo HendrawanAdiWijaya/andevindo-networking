@@ -25,6 +25,14 @@ public class NetworkResponse {
         mVolleyResponseStatus = volleyResponseStatus;
     }
 
+    public JSONArray getDataAsArray() {
+        return mDataAsArray;
+    }
+
+    public void setDataAsArray(JSONArray dataAsArray) {
+        mDataAsArray = dataAsArray;
+    }
+
     public VolleyResponseStatus getVolleyResponseStatus() {
         return mVolleyResponseStatus;
     }

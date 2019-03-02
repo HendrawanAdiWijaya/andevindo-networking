@@ -31,6 +31,6 @@ public class VolleyListener{
     }
 
     public interface VolleyGlobalListener{
-        void response(JSONObject jsonObjectData, int code, String status, String tag, VolleyResponseStatus generalError, VolleyError rawError);
+        void response(NetworkResponse networkResponse, String tag, VolleyError rawError);
     }
 }

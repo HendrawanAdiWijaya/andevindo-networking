@@ -42,7 +42,7 @@ public class Volley {
                     }
 
                     if (mVolleyGlobalListener != null) {
-                        mVolleyGlobalListener.response(jsonObjectData, code, message, mTag, VolleyResponseStatus.SUCCESS, null);
+                        mVolleyGlobalListener.response(new NetworkResponse(code, jsonObjectData, message, VolleyResponseStatus.SUCCESS), mTag, null);
                     }
 
                     if (mVolleySuccessRawJSONListener != null) {
@@ -60,7 +60,7 @@ public class Volley {
                     }
 
                     if (mVolleyGlobalListener != null) {
-                        mVolleyGlobalListener.response(null, -1, null, mTag, VolleyResponseStatus.SERVER_ERROR, new ParseError());
+                        mVolleyGlobalListener.response(new NetworkResponse(-1, null, null, VolleyResponseStatus.SERVER_ERROR), mTag, null);
                     }
                 }
 
@@ -78,7 +78,7 @@ public class Volley {
                 }
 
                 if (mVolleyGlobalListener != null) {
-                    mVolleyGlobalListener.response(null, -1, null, mTag, volleyResponseStatus, error);
+                    mVolleyGlobalListener.response(new NetworkResponse(-1, null, null, volleyResponseStatus), mTag, null);
                 }
 
                 if (mVolleyErrorListener!=null){

@@ -1,6 +1,7 @@
 package com.andevindo.andevindonetworking;
 
-import org.json.JSONException;
+import com.android.volley.VolleyError;
+
 import org.json.JSONObject;
 
 /**
@@ -9,18 +10,12 @@ import org.json.JSONObject;
 
 public class VolleyListener{
 
-    public interface VolleyRawJSONListener<T>{
-        void doWork(T t, String tag);
+    public interface VolleySuccessRawJSONListener {
+        void response(JSONObject jsonObjectRaw, String tag);
     }
 
     public interface VolleySuccessListener {
-        void onSuccess(JSONObject jsonObject, String tag);
-        void onOtherResponse(JSONObject jsonObject, String tag);
-
-    }
-
-    public interface VolleyResponseListener<T>{
-        void doWork(T t, int responseCode, String tag);
+        void response(JSONObject jsonObjectData, int responseCode, String status, String tag);
     }
 
     public interface VolleyErrorListener {
@@ -31,12 +26,11 @@ public class VolleyListener{
 
     }
 
-    public interface VolleyErrorResponseListener extends VolleyErrorListener{
-        void onResponseNotFound(String tag);
-    }
-
     public interface VolleyErrorGlobalListener{
         void onErrorGlobalListener(String tag);
     }
 
+    public interface VolleyGlobalListener{
+        void response(JSONObject jsonObjectData, int code, String status, String tag, VolleyResponseStatus generalError, VolleyError rawError);
+    }
 }

@@ -1,9 +1,9 @@
 package com.andevindo.andevindonetworking;
 
-import com.android.volley.ParseError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,15 +34,15 @@ public class Volley {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONObject jsonObjectData = getData(response);
+                    Object dataObject = getData(response);
                     int code = getCode(response);
                     String message = getMessage(response);
                     if (mVolleySuccessListener != null) {
-                        mVolleySuccessListener.response(jsonObjectData, code, message, mTag);
+                        mVolleySuccessListener.response(new NetworkResponse(code, dataObject, message, VolleyResponseStatus.SUCCESS), mTag);
                     }
 
                     if (mVolleyGlobalListener != null) {
-                        mVolleyGlobalListener.response(new NetworkResponse(code, jsonObjectData, message, VolleyResponseStatus.SUCCESS), mTag, null);
+                        mVolleyGlobalListener.response(new NetworkResponse(code, dataObject, message, VolleyResponseStatus.SUCCESS), mTag, null);
                     }
 
                     if (mVolleySuccessRawJSONListener != null) {
@@ -104,8 +104,8 @@ public class Volley {
         private boolean mIsDebugOn;
         private ProgressListener mProgressListener;
 
-        private JSONObject getData(JSONObject jsonObject) throws JSONException {
-            return jsonObject.getJSONObject("data");
+        private Object getData(JSONObject jsonObject) throws JSONException {
+            return jsonObject.get("data");
         }
 
         private int getCode(JSONObject jsonObject) throws JSONException {

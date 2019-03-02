@@ -1,17 +1,26 @@
 package com.andevindo.andevindonetworking;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class NetworkResponse {
 
     private int mCode;
-    private JSONObject mData;
+    private JSONObject mDataAsObject;
+    private JSONArray mDataAsArray;
     private String mMessage;
     private VolleyResponseStatus mVolleyResponseStatus;
 
-    public NetworkResponse(int code, JSONObject data, String message, VolleyResponseStatus volleyResponseStatus) {
+    public NetworkResponse(int code, Object data, String message, VolleyResponseStatus volleyResponseStatus) {
         mCode = code;
-        mData = data;
+        if (data==null){
+            mDataAsObject = null;
+            mDataAsArray = null;
+        }
+        else if (data instanceof JSONObject)
+            mDataAsObject = ((JSONObject) data);
+        else
+            mDataAsArray = ((JSONArray) data);
         mMessage = message;
         mVolleyResponseStatus = volleyResponseStatus;
     }
@@ -24,12 +33,12 @@ public class NetworkResponse {
         mVolleyResponseStatus = volleyResponseStatus;
     }
 
-    public JSONObject getData() {
-        return mData;
+    public JSONObject getDataAsObject() {
+        return mDataAsObject;
     }
 
-    public void setData(JSONObject data) {
-        mData = data;
+    public void setDataAsObject(JSONObject dataAsObject) {
+        mDataAsObject = dataAsObject;
     }
 
     public int getCode() {

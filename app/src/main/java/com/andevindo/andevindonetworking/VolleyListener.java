@@ -15,7 +15,7 @@ public class VolleyListener{
     }
 
     public interface VolleySuccessListener {
-        void response(JSONObject jsonObjectData, int responseCode, String status, String tag);
+        void response(NetworkResponse networkResponse, String tag);
     }
 
     public interface VolleyErrorListener {

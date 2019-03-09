@@ -13,7 +13,7 @@ public class NetworkResponse {
 
     public NetworkResponse(int code, Object data, String message, VolleyResponseStatus volleyResponseStatus) {
         mCode = code;
-        if (data==null){
+        if (data.equals(JSONObject.NULL)){
             mDataAsObject = null;
             mDataAsArray = null;
         }

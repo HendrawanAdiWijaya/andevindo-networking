@@ -1,9 +1,11 @@
 package com.andevindo.andevindonetworking;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +31,7 @@ public class Volley {
 
     public static class API {
 
+        private MutableLiveData<NetworkResponse> mNetworkResponseMutableLiveData = new MutableLiveData<>();
         private VolleyListener.VolleySuccessListener mVolleySuccessListener;
         private Response.Listener<JSONObject> mSuccessListener = new Response.Listener<JSONObject>() {
             @Override
@@ -49,6 +52,8 @@ public class Volley {
                         mVolleySuccessRawJSONListener.response(response, mTag);
                     }
 
+                    mNetworkResponseMutableLiveData.setValue(new NetworkResponse(code, dataObject, message, VolleyResponseStatus.SUCCESS));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     if (mVolleyErrorListener != null) {
@@ -62,6 +67,8 @@ public class Volley {
                     if (mVolleyGlobalListener != null) {
                         mVolleyGlobalListener.response(new NetworkResponse(-1, null, null, VolleyResponseStatus.SERVER_ERROR), mTag, null);
                     }
+
+                    mNetworkResponseMutableLiveData.setValue(new NetworkResponse(-1, null, null, VolleyResponseStatus.SERVER_ERROR));
                 }
 
 
@@ -92,6 +99,8 @@ public class Volley {
                 if (mVolleyErrorGlobalListener!=null){
                     mVolleyErrorGlobalListener.onErrorGlobalListener(mTag);
                 }
+
+                mNetworkResponseMutableLiveData.setValue(new NetworkResponse(-1, null, null, volleyResponseStatus));
             }
         };
         private VolleyListener.VolleyErrorListener mVolleyErrorListener;
@@ -174,6 +183,11 @@ public class Volley {
 
         public Volley go() {
             return new Volley(mTag, mVolleyModel, mSuccessListener, mErrorListener, mNetworkConfiguration, mIsDebugOn, mProgressListener);
+        }
+
+        public LiveData<NetworkResponse> goAsLiveData(){
+            new Volley(mTag, mVolleyModel, mSuccessListener, mErrorListener, mNetworkConfiguration, mIsDebugOn, mProgressListener);
+            return mNetworkResponseMutableLiveData;
         }
 
     }

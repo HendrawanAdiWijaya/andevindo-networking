@@ -13,11 +13,10 @@ public class NetworkResponse {
 
     public NetworkResponse(int code, Object data, String message, VolleyResponseStatus volleyResponseStatus) {
         mCode = code;
-        if (data.equals(JSONObject.NULL)){
+        if (data == null || data.equals(JSONObject.NULL)) {
             mDataAsObject = null;
             mDataAsArray = null;
-        }
-        else if (data instanceof JSONObject)
+        } else if (data instanceof JSONObject)
             mDataAsObject = ((JSONObject) data);
         else
             mDataAsArray = ((JSONArray) data);

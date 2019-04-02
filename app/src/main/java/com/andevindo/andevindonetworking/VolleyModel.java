@@ -258,7 +258,7 @@ public class VolleyModel<T extends NetworkModel> {
         }
 
         public ParameterBuilder addParameter(String key, String value) {
-            return addParameterLocal(key, value);
+            return addParameterLocal(key, value + "");
         }
 
         public ParameterBuilder addParameter(String key, int value) {

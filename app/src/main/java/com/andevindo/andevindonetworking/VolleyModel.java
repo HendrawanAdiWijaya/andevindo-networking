@@ -257,24 +257,76 @@ public class VolleyModel<T extends NetworkModel> {
             return this;
         }
 
-        public ParameterBuilder addParameter(String key, String value) {
-            return addParameterLocal(key, value + "");
+        protected ParameterBuilder addParameterLocalWithArray(String key, String... value) {
+            if (value == null)
+                return addParameterLocal(key, "");
+            else if (value.length == 1)
+                return addParameterLocal(key, value[0] + "");
+            else
+                for (int i = 0; i < value.length; i++) {
+                    addParameterLocal(key + "[]", value[i] + "");
+                }
+            return this;
         }
 
-        public ParameterBuilder addParameter(String key, int value) {
-            return addParameterLocal(key, value + "");
+        public ParameterBuilder addParameter(String key, String... value) {
+            if (value == null)
+                return addParameterLocal(key, "");
+            else if (value.length == 1)
+                return addParameterLocal(key, value[0] + "");
+            else
+                for (int i = 0; i < value.length; i++) {
+                    addParameterLocal(key + "[]", value[i] + "");
+                }
+            return this;
         }
 
-        public ParameterBuilder addParameter(String key, float value) {
-            return addParameterLocal(key, value + "");
+        public ParameterBuilder addParameter(String key, int... value) {
+            if (value == null)
+                return addParameterLocal(key, "");
+            else if (value.length == 1)
+                return addParameterLocal(key, value[0] + "");
+            else
+                for (int i = 0; i < value.length; i++) {
+                    addParameterLocal(key + "[]", value[i] + "");
+                }
+            return this;
         }
 
-        public ParameterBuilder addParameter(String key, double value) {
-            return addParameterLocal(key, value + "");
+        public ParameterBuilder addParameter(String key, float... value) {
+            if (value == null)
+                return addParameterLocal(key, "");
+            else if (value.length == 1)
+                return addParameterLocal(key, value[0] + "");
+            else
+                for (int i = 0; i < value.length; i++) {
+                    addParameterLocal(key + "[]", value[i] + "");
+                }
+            return this;
         }
 
-        public ParameterBuilder addParameter(String key, boolean value) {
-            return addParameterLocal(key, value + "");
+        public ParameterBuilder addParameter(String key, double... value) {
+            if (value == null)
+                return addParameterLocal(key, "");
+            else if (value.length == 1)
+                return addParameterLocal(key, value[0] + "");
+            else
+                for (int i = 0; i < value.length; i++) {
+                    addParameterLocal(key + "[]", value[i] + "");
+                }
+            return this;
+        }
+
+        public ParameterBuilder addParameter(String key, boolean... value) {
+            if (value == null)
+                return addParameterLocal(key, "");
+            else if (value.length == 1)
+                return addParameterLocal(key, value[0] + "");
+            else
+                for (int i = 0; i < value.length; i++) {
+                    addParameterLocal(key + "[]", value[i] + "");
+                }
+            return this;
         }
 
         public ParameterBuilder setUsingHeader(boolean usingHeader) {

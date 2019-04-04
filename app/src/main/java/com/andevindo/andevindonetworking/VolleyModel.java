@@ -264,7 +264,7 @@ public class VolleyModel<T extends NetworkModel> {
                 return addParameterLocal(key, value[0] + "");
             else
                 for (int i = 0; i < value.length; i++) {
-                    addParameterLocal(key + "[]", value[i] + "");
+                    addParameterLocal(key + "[" + i + "]", value[i] + "");
                 }
             return this;
         }
@@ -276,7 +276,7 @@ public class VolleyModel<T extends NetworkModel> {
                 return addParameterLocal(key, value[0] + "");
             else
                 for (int i = 0; i < value.length; i++) {
-                    addParameterLocal(key + "[]", value[i] + "");
+                    addParameterLocal(key + "[" + i + "]", value[i] + "");
                 }
             return this;
         }
@@ -288,7 +288,7 @@ public class VolleyModel<T extends NetworkModel> {
                 return addParameterLocal(key, value[0] + "");
             else
                 for (int i = 0; i < value.length; i++) {
-                    addParameterLocal(key + "[]", value[i] + "");
+                    addParameterLocal(key + "[" + i + "]", value[i] + "");
                 }
             return this;
         }
@@ -300,7 +300,7 @@ public class VolleyModel<T extends NetworkModel> {
                 return addParameterLocal(key, value[0] + "");
             else
                 for (int i = 0; i < value.length; i++) {
-                    addParameterLocal(key + "[]", value[i] + "");
+                    addParameterLocal(key + "[" + i + "]", value[i] + "");
                 }
             return this;
         }
@@ -312,7 +312,7 @@ public class VolleyModel<T extends NetworkModel> {
                 return addParameterLocal(key, value[0] + "");
             else
                 for (int i = 0; i < value.length; i++) {
-                    addParameterLocal(key + "[]", value[i] + "");
+                    addParameterLocal(key + "[" + i + "]", value[i] + "");
                 }
             return this;
         }
@@ -324,7 +324,7 @@ public class VolleyModel<T extends NetworkModel> {
                 return addParameterLocal(key, value[0] + "");
             else
                 for (int i = 0; i < value.length; i++) {
-                    addParameterLocal(key + "[]", value[i] + "");
+                    addParameterLocal(key + "[" + i + "]", value[i] + "");
                 }
             return this;
         }

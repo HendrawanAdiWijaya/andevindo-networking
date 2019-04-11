@@ -51,6 +51,10 @@ public class VolleyModel<T extends NetworkModel> {
         mNetworkMethod = parameterBuilder.mNetworkMethod;
         mIsUsingHeader = parameterBuilder.isUsingHeader;
         mIsUsingParameter = false;
+        if (mNetworkMethod.equals(NetworkMethod.PUT)){
+            mNetworkMethod = NetworkMethod.POST;
+            mParameters.put("_method", "PUT");
+        }
     }
 
     public boolean isUsingHeader() {

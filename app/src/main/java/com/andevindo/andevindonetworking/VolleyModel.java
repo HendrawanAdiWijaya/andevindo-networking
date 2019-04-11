@@ -272,9 +272,12 @@ public class VolleyModel<T extends NetworkModel> {
         public ParameterBuilder addParameter(String key, String... value) {
             if (value == null)
                 return addParameterLocal(key, "");
-            else if (value.length == 1)
-                return addParameterLocal(key, value[0] + "");
-            else
+            else if (value.length == 1) {
+                if (value[0] == null)
+                    return addParameterLocal(key, "");
+                else
+                    return addParameterLocal(key, value[0] + "");
+            } else
                 for (int i = 0; i < value.length; i++) {
                     addParameterLocal(key + "[" + i + "]", value[i] + "");
                 }

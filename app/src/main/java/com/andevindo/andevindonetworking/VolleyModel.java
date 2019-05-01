@@ -263,7 +263,7 @@ public class VolleyModel<T extends NetworkModel> {
 
         public ParameterBuilder addParameter(String key, String value) {
             if (value == null)
-                return null;
+                return this;
             else
                 return addParameterLocal(key, value);
         }

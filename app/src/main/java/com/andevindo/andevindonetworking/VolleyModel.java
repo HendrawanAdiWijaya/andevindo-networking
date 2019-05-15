@@ -104,7 +104,7 @@ public class VolleyModel<T extends NetworkModel> {
     public HttpEntity getHttpEntity() {
         if (mParameters != null)
             for (Map.Entry<String, String> parameter : mParameters.entrySet()) {
-                mMultipartEntityBuilder.addTextBody(parameter.getKey(), parameter.getValue());
+                mMultipartEntityBuilder.addTextBody(parameter.getKey(), parameter.getValue() + "");
             }
         return mMultipartEntityBuilder.build();
     }

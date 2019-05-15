@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -183,6 +184,12 @@ public class Volley {
 
         public Volley go() {
             return new Volley(mTag, mVolleyModel, mSuccessListener, mErrorListener, mNetworkConfiguration, mIsDebugOn, mProgressListener);
+        }
+
+        public RequestFuture<JSONObject> get(){
+            RequestFuture<JSONObject> requestFuture = RequestFuture.newFuture();
+            new VolleyRequest().sendRequest(mTag, mVolleyModel, requestFuture, requestFuture, mNetworkConfiguration, mIsDebugOn, mProgressListener);
+            return requestFuture;
         }
 
         public LiveData<NetworkResponse> goAsLiveData(){

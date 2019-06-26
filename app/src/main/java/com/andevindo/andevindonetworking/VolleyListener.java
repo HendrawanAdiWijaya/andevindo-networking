@@ -33,4 +33,8 @@ public class VolleyListener{
     public interface VolleyGlobalListener{
         void response(NetworkResponse networkResponse, String tag, VolleyError rawError);
     }
+
+    public interface VolleyUploadErrorLogListener{
+        void uploadErrorString(String error);
+    }
 }

@@ -24,9 +24,9 @@ public class Volley {
 
     public Volley(String tag, VolleyModel volleyModel,
                   Response.Listener<JSONObject> successListener, Response.ErrorListener errorListener, NetworkConfiguration networkConfiguration,
-                  boolean isDebugOn, ProgressListener progressListener) {
+                  boolean isDebugOn, boolean isUploadErrorLog, ProgressListener progressListener) {
 
-        new VolleyRequest().sendRequest(tag, volleyModel, successListener, errorListener, networkConfiguration, isDebugOn, progressListener);
+        new VolleyRequest().sendRequest(tag, volleyModel, successListener, errorListener, networkConfiguration, isDebugOn, isUploadErrorLog, progressListener);
 
     }
 
@@ -111,7 +111,7 @@ public class Volley {
         private VolleyModel mVolleyModel = new VolleyModel.ParameterBuilder("").build();
         private NetworkConfiguration mNetworkConfiguration = new NetworkConfiguration.Builder().build();
         private String mTag;
-        private boolean mIsDebugOn;
+        private boolean mIsDebugOn, mIsUploadErrorLog;
         private ProgressListener mProgressListener;
 
         private Object getData(JSONObject jsonObject) throws JSONException {
@@ -177,23 +177,28 @@ public class Volley {
             return this;
         }
 
+        public API setUploadErrorLog(boolean isUploadErrorLog){
+            mIsUploadErrorLog = isUploadErrorLog;
+            return this;
+        }
+
         public API setProgressListener(ProgressListener progressListener) {
             mProgressListener = progressListener;
             return this;
         }
 
         public Volley go() {
-            return new Volley(mTag, mVolleyModel, mSuccessListener, mErrorListener, mNetworkConfiguration, mIsDebugOn, mProgressListener);
+            return new Volley(mTag, mVolleyModel, mSuccessListener, mErrorListener, mNetworkConfiguration, mIsDebugOn, mIsUploadErrorLog, mProgressListener);
         }
 
         public RequestFuture<JSONObject> get(){
             RequestFuture<JSONObject> requestFuture = RequestFuture.newFuture();
-            new VolleyRequest().sendRequest(mTag, mVolleyModel, requestFuture, requestFuture, mNetworkConfiguration, mIsDebugOn, mProgressListener);
+            new VolleyRequest().sendRequest(mTag, mVolleyModel, requestFuture, requestFuture, mNetworkConfiguration, mIsDebugOn, mIsUploadErrorLog, mProgressListener);
             return requestFuture;
         }
 
         public LiveData<NetworkResponse> goAsLiveData(){
-            new Volley(mTag, mVolleyModel, mSuccessListener, mErrorListener, mNetworkConfiguration, mIsDebugOn, mProgressListener);
+            new Volley(mTag, mVolleyModel, mSuccessListener, mErrorListener, mNetworkConfiguration, mIsDebugOn, mIsUploadErrorLog, mProgressListener);
             return mNetworkResponseMutableLiveData;
         }
 

@@ -33,17 +33,19 @@ class CustomRequestJson extends Request<JSONObject> {
     private Map<String, String> mHeaders;
     private HttpEntity mHttpEntity;
     private boolean mIsDebugOn;
+    private boolean mIsUploadErrorLog;
     private int mMethod;
     private ProgressListener mProgressListener;
 
     public CustomRequestJson(int method, String url, Map<String, String> headers, Map<String, String> params,
-                             HttpEntity httpEntity, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener, boolean isDebugOn, ProgressListener progressListener) {
+                             HttpEntity httpEntity, Response.Listener<JSONObject> responseListener, Response.ErrorListener errorListener, boolean isDebugOn, boolean isUploadErrorLog, ProgressListener progressListener) {
         super(method, url, errorListener);
         mListener = responseListener;
         mParams = params;
         mHttpEntity = httpEntity;
         mHeaders = headers;
         mIsDebugOn = isDebugOn;
+        mIsUploadErrorLog = isUploadErrorLog;
         mProgressListener = progressListener;
     }
 
@@ -93,16 +95,29 @@ class CustomRequestJson extends Request<JSONObject> {
     public void deliverError(VolleyError error) {
         super.deliverError(error);
         Log.d("SerResponse", "OnDeliver");
-        if (mIsDebugOn && error != null && error.networkResponse != null && error.networkResponse.data != null) {
+        if (error != null && error.networkResponse != null && error.networkResponse.data != null) {
             try {
-                Log.d("ServerResponse", new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+                if (mIsDebugOn)
+                    Log.d("ServerResponse", new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers)));
+                if (mIsUploadErrorLog)
+                    uploadErrorLog(new String(error.networkResponse.data, HttpHeaderParser.parseCharset(error.networkResponse.headers)));
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                Log.d("ServerResponse", new String(error.networkResponse.data));
+                if (mIsDebugOn) {
+                    e.printStackTrace();
+                    Log.d("ServerResponse", new String(error.networkResponse.data));
+                }
+                if (mIsUploadErrorLog)
+                    uploadErrorLog(new String(error.networkResponse.data));
             } catch (NullPointerException e) {
-                Log.d("ServerResponse", "Null");
+                if (mIsDebugOn)
+                    Log.d("ServerResponse", "Null");
             }
         }
+    }
+
+    void uploadErrorLog(String errorLog) {
+        if (Network.getVolleyUploadErrorLogListener() != null)
+            Network.getVolleyUploadErrorLogListener().uploadErrorString(errorLog);
     }
 
     @Override

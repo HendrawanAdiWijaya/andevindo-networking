@@ -25,7 +25,7 @@ public class VolleyRequest {
                             final Response.Listener<JSONObject> successlistener,
                             final Response.ErrorListener errorListener,
                             NetworkConfiguration networkConfiguration,
-                            boolean isDebugOn,
+                            boolean isDebugOn, boolean isUploadErrorLog,
                             ProgressListener progressListener) {
         int method;
         if (volleyModel.getNetworkMethod() == NetworkMethod.POST
@@ -61,7 +61,7 @@ public class VolleyRequest {
                     errorListener.onErrorResponse(error);
                 }
             }
-        }, isDebugOn, progressListener);
+        }, isDebugOn, isUploadErrorLog, progressListener);
 
         mCustomRequestJson.setRetryPolicy(new DefaultRetryPolicy(networkConfiguration.getSocketTimeOut(),
                 networkConfiguration.getRetries(), DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

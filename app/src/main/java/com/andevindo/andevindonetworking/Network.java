@@ -18,6 +18,10 @@ public class Network {
 
     private static Network sINSTANCE;
 
+    private static VolleyListener.VolleyUploadErrorLogListener sVolleyUploadErrorLogListener;
+
+    private static VolleyModel sErrorLogVolleyModel;
+
     public static Network setNetworkConfiguration(NetworkConfiguration networkConfiguration){
         sSOCKET_TIME_OUT = networkConfiguration.getSocketTimeOut();
         sRETRIES = networkConfiguration.getRetries();
@@ -31,6 +35,22 @@ public class Network {
             sINSTANCE = new Network(context);
         }
         return sINSTANCE;
+    }
+
+    public static VolleyModel getErrorLogVolleyModel() {
+        return sErrorLogVolleyModel;
+    }
+
+    public static void setErrorLogVolleyModel(VolleyModel errorLogVolleyModel) {
+        sErrorLogVolleyModel = errorLogVolleyModel;
+    }
+
+    public static void setUploadErrorLogListener(VolleyListener.VolleyUploadErrorLogListener volleyUploadErrorLogListener){
+        sVolleyUploadErrorLogListener = volleyUploadErrorLogListener;
+    }
+
+    public static VolleyListener.VolleyUploadErrorLogListener getVolleyUploadErrorLogListener(){
+        return sVolleyUploadErrorLogListener;
     }
 
     private Network(Context context) {

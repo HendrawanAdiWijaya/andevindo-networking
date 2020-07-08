@@ -37,7 +37,7 @@ public class VolleyRequest {
         else if (volleyModel.getNetworkMethod() == NetworkMethod.PUT) {
             method = Request.Method.POST;
         }else
-            method = Request.Method.DELETE;
+            method = Request.Method.POST;
         Map<String, String> header = null;
         if (volleyModel.isUsingHeader()){
             if (volleyModel.getHeaders()==null){

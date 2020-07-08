@@ -51,7 +51,7 @@ class CustomRequestJson extends Request<JSONObject> {
 
     @Override
     public byte[] getBody() throws AuthFailureError {
-        if (mHttpEntity != null) {
+        if (mHttpEntity!=null && getMethod()== Method.POST) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             try {
                 mHttpEntity.writeTo(new CountingOutputStream(bos, mHttpEntity.getContentLength(), mProgressListener));
@@ -77,7 +77,7 @@ class CustomRequestJson extends Request<JSONObject> {
 
     @Override
     public String getBodyContentType() {
-        if (getMethod()== Method.POST)
+        if (mHttpEntity!=null && getMethod()== Method.POST)
             return mHttpEntity.getContentType().getValue();
         else
             return "application/x-www-form-urlencoded";

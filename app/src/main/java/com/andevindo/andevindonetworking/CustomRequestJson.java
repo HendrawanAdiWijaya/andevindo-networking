@@ -83,13 +83,13 @@ class CustomRequestJson extends Request<JSONObject> {
             return super.getBodyContentType();
     }
 
-   /* @Override
+    @Override
     protected Map<String, String> getParams() throws AuthFailureError {
         if (mParams != null)
             return mParams;
         else
             return super.getParams();
-    }*/
+    }
 
     @Override
     public void deliverError(VolleyError error) {

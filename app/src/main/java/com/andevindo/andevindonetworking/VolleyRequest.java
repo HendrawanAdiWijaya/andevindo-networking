@@ -28,16 +28,14 @@ public class VolleyRequest {
                             boolean isDebugOn, boolean isUploadErrorLog,
                             ProgressListener progressListener) {
         int method;
-        if (volleyModel.getNetworkMethod() == NetworkMethod.POST
-                || (volleyModel.getNetworkMethod() == NetworkMethod.PUT && volleyModel.isUsingLaravelWebService())
-                || (volleyModel.getNetworkMethod() == NetworkMethod.DELETE && volleyModel.isUsingLaravelWebService()))
+        if (volleyModel.getNetworkMethod() == NetworkMethod.POST)
             method = Request.Method.POST;
         else if (volleyModel.getNetworkMethod() == NetworkMethod.GET)
             method = Request.Method.GET;
         else if (volleyModel.getNetworkMethod() == NetworkMethod.PUT) {
-            method = Request.Method.POST;
+            method = Request.Method.PUT;
         }else
-            method = Request.Method.POST;
+            method = Request.Method.DELETE;
         Map<String, String> header = null;
         if (volleyModel.isUsingHeader()){
             if (volleyModel.getHeaders()==null){

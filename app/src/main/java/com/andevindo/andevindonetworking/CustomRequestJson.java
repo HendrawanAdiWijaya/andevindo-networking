@@ -77,7 +77,7 @@ class CustomRequestJson extends Request<JSONObject> {
 
     @Override
     public String getBodyContentType() {
-        if (mMethod== Method.POST)
+        if (getMethod()== Method.POST)
             return mHttpEntity.getContentType().getValue();
         else
             return "application/x-www-form-urlencoded";

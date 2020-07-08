@@ -51,10 +51,11 @@ public class VolleyModel<T extends NetworkModel> {
         mNetworkMethod = parameterBuilder.mNetworkMethod;
         mIsUsingHeader = parameterBuilder.isUsingHeader;
         mIsUsingParameter = false;
-        if (mNetworkMethod.equals(NetworkMethod.PUT)) {
+       /* if (mNetworkMethod.equals(NetworkMethod.PUT)) {
             mNetworkMethod = NetworkMethod.POST;
             mParameters.put("_method", "PUT");
-        }
+        }*/
+
     }
 
     public boolean isUsingHeader() {
@@ -224,7 +225,7 @@ public class VolleyModel<T extends NetworkModel> {
         private String mUrl;
         private NetworkMethod mNetworkMethod = NetworkMethod.POST;
         private boolean isUsingHeader;
-        private boolean mIsUsingLaravelWebService;
+        private boolean mIsUsingLaravelWebService = true;
 
         public ParameterBuilder setNetworkMethod(NetworkMethod networkMethod, boolean isUsingLaravelWebService) {
             mNetworkMethod = networkMethod;

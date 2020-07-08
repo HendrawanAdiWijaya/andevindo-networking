@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndevindoNetworking.iml" filepath="$PROJECT_DIR$/AndevindoNetworking.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndevindoNetworking.iml" filepath="$PROJECT_DIR$/AndevindoNetworking.iml" group="AndevindoNetworking" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="AndevindoNetworking/app" />
     </modules>
   </component>
 </project>

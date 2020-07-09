@@ -259,6 +259,10 @@ public class VolleyModel<T extends NetworkModel> {
 
         public ParameterBuilder setNetworkMethod(NetworkMethod networkMethod) {
             mNetworkMethod = networkMethod;
+            if (networkMethod == NetworkMethod.PUT && mIsUsingLaravelWebService)
+                addParameter("_method", "PUT");
+            else if (networkMethod == NetworkMethod.DELETE && mIsUsingLaravelWebService)
+                addParameter("_method", "DELETE");
             return this;
         }
 

@@ -51,7 +51,7 @@ class CustomRequestJson extends Request<JSONObject> {
 
     @Override
     public byte[] getBody() throws AuthFailureError {
-        if (mHttpEntity!=null && getMethod()== Method.POST) {
+        if (mHttpEntity != null) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             try {
                 mHttpEntity.writeTo(new CountingOutputStream(bos, mHttpEntity.getContentLength(), mProgressListener));
@@ -77,19 +77,19 @@ class CustomRequestJson extends Request<JSONObject> {
 
     @Override
     public String getBodyContentType() {
-        if (mHttpEntity!=null && getMethod()== Method.POST)
+        if (mHttpEntity != null)
             return mHttpEntity.getContentType().getValue();
         else
             return super.getBodyContentType();
     }
 
-    @Override
+   /* @Override
     protected Map<String, String> getParams() throws AuthFailureError {
         if (mParams != null)
             return mParams;
         else
             return super.getParams();
-    }
+    }*/
 
     @Override
     public void deliverError(VolleyError error) {
